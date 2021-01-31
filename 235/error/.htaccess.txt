@@ -1,0 +1,4 @@
+ErrorDocument 404 /amb7316/235/error/error.html
+DirectoryIndex noterror.html
+
+ModPagespeed off
