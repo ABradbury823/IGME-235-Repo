@@ -1,24 +1,38 @@
-body{background-color: #f7dccb; 
+body{
+     background-color: #f7dccb; 
      font-family: Arial, sans-serif;
+}
+
+main {
+     border: solid 1px black;
+     margin:0 auto;
+     width: 80vw;
+     padding: 1rem;
+     background-color: #d3beae;
 }
     
 h1, h2{font-family: 'Press Start 2P', cursive, Arial, sans-serif;}
 
 h2{color:darkslateblue;}
 
-h2,p,ul{margin-left: 50px;}
+h2,p{background-color: #f7dccb; padding: 1rem;}
+
+ul{background-color: #f7dccb; padding: 1rem 2rem;}
 
 img{border:solid 3px #776C92}
 
 img.side{float:right; margin-right:50px;}
 
-object{margin-left: 25%; 
-       width: 50%;
-       height: auto;
+object{
+     margin-left: 25%; 
+     width: 50%;
+     height: auto;
 }
 
-footer div {font-style: italic;
-            background-color: #DEB190;
+footer{
+     font-style: italic;
+     background-color: #DEB190;
+     padding: 1rem;
 }
 
 a:link{color: #776C92;}

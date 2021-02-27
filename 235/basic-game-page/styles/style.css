@@ -1,12 +1,49 @@
+body{
+    margin-left: 2em;
+    margin-right: 2em;
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 1.2em;
+    background-color: #e7f5ff;
+}
 
+body.gallery{
+    border-bottom: solid 1px #19244e;
+}
 
+h1{
+    font-family: 'Aclonica', Arial, sans-serif;
+    border-bottom: solid 1px #19244e;
+    color: #2A594C;
+}
 
+h2{color: #2A594C}
 
-
+blockquote{
+    background-color: #C1E0F7;
+    border: solid 1px grey;
+}
 
 img{
+    width: 75%;
+    height:auto;
+    border: solid 3px lightgrey;
+}
+
+img.gallery{
     width: 20%; 
     height: auto; 
-    border: solid 3px lightgrey;
-    margin: 2em;
+    border: solid 3px grey;
+    margin: 1.5em;
 }
+
+div.gallery{
+    border-top: solid 1px #19244e;
+    border-bottom: solid 1px #19244e;
+}
+
+footer{
+    background-color: lightgrey;
+    font-style: italic;
+    border: solid 1px grey;
+}
+
