@@ -1,0 +1,85 @@
+html{
+    font-size: 16px;
+    font-family: 'Raleway', Arial, sans-serif;
+}
+
+body{
+    background-color: #ffebe2;
+}
+
+.textbox{
+    border: solid 2px #514E49;
+    background-color: #d89ca5;
+    padding: 1rem;
+}
+
+
+@media screen and (min-width: 1050px)
+{
+    main{
+        display: grid;
+        height: 96vh;
+        margin: 2vh;
+        grid-template-rows: 100px 1fr 1fr;
+        grid-template-columns: 60% 1fr;
+        grid-template-areas: "heading heading" 
+                             "bio     picture" 
+                             "links   links";
+    }
+}
+
+h1{
+    grid-area: heading;
+    border-bottom: solid 1px #514E49;
+}
+
+h2{
+    border-bottom: solid 1px #514E49;
+}
+
+#bio{
+    grid-area: bio;
+    /*border: solid 1px black;*/
+}
+
+#picture{
+    display: flex;
+    grid-area: picture;
+    justify-content: center;
+    align-content: center;
+    /* border: solid 1px black; */
+}
+
+img{
+    max-width: 300px;
+    width: 100%;
+    border: solid 5px #514E49;
+}
+
+#links{
+    grid-area: links;
+    /* border: solid 1px black; */
+}
+
+ul{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    list-style-type: square;
+}
+
+a:link{color: #8b7678;}
+
+a:visited{color: #FBE1E4;}
+
+a:focus{color: #fdd6c4;}
+
+a:hover{color:#fdd6c4}
+
+a:active{color: #8b7678;}
+
+/*make the makeshift links only black, appear unuseable*/
+
+a.project-link:link{color: black;}
+
+a.project-link:visited{color:black;}
