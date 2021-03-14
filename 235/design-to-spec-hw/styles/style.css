@@ -1,0 +1,178 @@
+@font-face{
+    font-family: Dogica;
+    src: url(../fonts/Dogica.woff);
+}
+
+@font-face{
+    font-family: Retro;
+    src: url(../fonts/Retro.woff);
+}
+
+p{
+    font-family: Dogica, Arial, Helvetica, sans-serif;
+}
+
+header, footer, h1, h2, h3{
+    font-family: Retro, Arial, Helvetica, sans-serif;
+    font-weight: 400;
+}
+
+body{
+    color: #fff;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+header{
+    background: #686868;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+header h1{
+    margin-left: 5%;
+}
+
+header img{
+    width: 45px;
+    margin: .5rem;
+}
+
+header #class-name{
+    position: absolute;
+    right: 1rem;
+    text-align: right;
+    margin-right: 4.3rem;
+}
+
+main{
+    width: 98.95vw;
+    background: #35363D;
+}
+
+#oak-tree{
+    display: flex;
+    justify-content: center;
+}
+
+#oak-tree #tree-textbox{
+    background: #686868;
+    width: 40%;
+    margin: 2rem .25rem;
+    padding: 2rem;
+}
+
+#oak-tree img{
+    width: 40%;
+    margin: 2rem .25rem;
+    padding: 2rem;
+    background-image: linear-gradient(135deg, #e8fdf5, #244d3e);
+}
+
+.white-border{
+    border: solid 5px white;
+}
+
+#valley img{
+    width: 98.95vw;
+}
+
+#gallery{
+    display: grid;
+    width: 80%;
+    margin: 1rem;
+    grid-template-columns: repeat(3, 1fr 2rem) 1fr;
+    grid-template-rows: 1fr 1rem 1fr;
+    grid-template-areas: "planks . planks-text . sticks . sticks-text"
+                         ".      . .           . .      . .          "
+                         "chests  . chests-text  . stairs . stairs-text";
+    position: relative;
+    left: 5%;
+}
+
+#gallery div{
+    width: 20vw;
+    height: 400px;
+}
+
+#gallery .gallery-textbox{
+    background: #686868;
+}
+
+.gallery-textbox p{
+    margin: 1rem;
+}
+
+#gallery .gallery-image{
+    background: #324e44;
+    text-align: center;
+    height: 390px;
+}
+
+.gallery-image img{
+    width: 18vw;
+}
+
+#planks{
+    grid-area: planks;
+}
+
+#planks-text{
+    grid-area: planks-text;
+}
+
+#sticks{
+    grid-area: sticks;
+}
+
+#sticks-text{
+    grid-area: sticks-text;
+}
+
+#chests{
+    grid-area: chests;
+}
+
+#chests-text{
+    grid-area: chests-text;
+}
+
+#stairs{
+    grid-area: stairs;
+}
+
+#stairs-text{
+    grid-area: stairs-text;
+}
+
+footer{
+    border-top: solid 5px white;
+    background: url(../media/trees.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-size: 20px;
+}
+
+footer div{
+    margin: 1rem 6rem;
+}
+
+footer #flavortext{
+    position: relative;
+    top: 50px;
+}
+
+footer #copyright{
+    float: right;
+    position: relative;
+    bottom: 25px;
+    right: 1rem;
+    text-align: right;
+    line-height: 2rem;
+}
+
+footer #svg-credit{
+    clear: right;
+}
