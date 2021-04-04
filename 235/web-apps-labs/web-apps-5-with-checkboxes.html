@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Web Apps-6</title>
+	<style>
+		body{
+			font-family:sans-serif;
+		}
+		#colorform{
+			background-color:#dfecdf;
+			color: #111;
+			padding:1em;width:400px;
+		}
+		#colorform p#info{
+			background-color:white;
+			color: black;
+			width:300px;
+			height:100px;
+			padding:.5em;
+		}
+		
+		#colorform legend{ 
+			font-weight:bold;
+			font-size:1.2em;
+		}
+	</style>
+</head>
+<body>
+
+<div id="colorform">
+	<legend>Choose your favorite color!</legend>
+	<p><input type="checkbox" name="colorGroup" id="colorGroupRed" value="red" /> Red</p>
+	<p><input type="checkbox" name="colorGroup" id="colorGroupGreen" value="green" /> Green</p>
+	<p><input type="checkbox" name="colorGroup" id="colorGroupBlue" value="blue" /> Blue</p>
+	<p><button id="colorButton" type="button">Submit</button></p>
+	<p id="info"></p>
+</div>
+
+<script>
+//vars for accessing different parts of page
+let checkboxes = document.querySelectorAll("input[type='checkbox']");
+let submitButton = document.querySelector("button");
+let legendText = document.querySelector("legend");
+let infoBox = document.querySelector("p[id='info']");
+let selectedArray = [];
+
+let selectionChange = (e) => {
+	//box has just been checked
+	if(e.target.checked){selectedArray.push(e.target.value);}
+
+	//box has been unchecked
+	else{selectedArray.splice(selectedArray.indexOf(e.target.value), 1);}
+
+	infoBox.innerHTML = "You selected ";
+	for(let i = 0; i < selectedArray.length; i++)
+	{
+		//color 1 and color 2 and...
+		if(i < selectedArray.length - 1 ){infoBox.innerHTML += selectedArray[i] + " and ";}
+
+		//...colors
+		else{infoBox.innerHTML += selectedArray[i];}
+	}
+
+	//print nothing if nothing is selected
+	if(selectedArray.length == 0){infoBox.innerHTML = "";}
+}
+
+let submitClicked = (e) => {
+    infoBox.innerHTML = "Your final selection is ";
+	for(let i = 0; i < selectedArray.length; i++)
+	{
+		//color 1 and color 2 and...
+		if(i < selectedArray.length - 1 ){infoBox.innerHTML += selectedArray[i] + " and ";}
+
+		//...colors
+		else{infoBox.innerHTML += selectedArray[i];}
+	}
+
+	//print nothing if nothing is selected
+	if(selectedArray.length == 0){infoBox.innerHTML = "";}
+
+	//just for fun, text changes to combine the three colors
+	if(selectedArray.length == 0){legendText.style.color = "black";}
+	else if(selectedArray.length == 3){legendText.style.color = "white";}
+	else if(selectedArray.find(color => color == "red") && selectedArray.find(color => color == "green")){legendText.style.color = "yellow";}
+	else if(selectedArray.find(color => color == "red") && selectedArray.find(color => color == "blue")){legendText.style.color = "magenta";}
+	else if(selectedArray.find(color => color == "blue") && selectedArray.find(color => color == "green")){legendText.style.color = "cyan";}
+	else if(selectedArray.find(color => color == "red")){legendText.style.color = "red";}
+	else if(selectedArray.find(color => color == "green")){legendText.style.color = "green";}
+	else if(selectedArray.find(color => color == "blue")){legendText.style.color = "blue";}
+}
+
+for(let button of checkboxes)
+{
+    button.addEventListener("change", selectionChange);
+}
+
+submitButton.addEventListener("click", submitClicked);
+
+</script>
+</body>
+</html>

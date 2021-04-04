@@ -1,0 +1,222 @@
+body{
+    background: #eeeeee;
+    margin: 0;
+    font-family: 'Merriweather', Georgia, 'Times New Roman', Times, serif;
+}
+
+p, .navbar, #contact{font-family: 'Lexend', Verdana, Geneva, Tahoma, sans-serif;}
+
+header #title{
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 0 10%;
+}
+
+header, footer{
+    background: black;
+    color: white;
+    padding: .5rem 0;
+}
+
+ul.navbar{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    font-size: 1.75em;
+    margin: 0 10%;
+    padding: 1rem 0;
+    /* border-left: solid 1px white;
+    border-right: solid 1px white; */
+}
+
+.navbar li{margin: .5rem;}
+
+@media screen and (min-width: 800px){
+    ul.navbar{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .navbar li{margin: 0;}
+}
+
+header a, footer a{
+    padding: .5rem;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+header a:link, footer a:link{color: #ffffff;}
+header a:visited, footer a:visited{color:#ffffff;}
+header a:focus, footer a:focus{background: #575757;}
+header a:hover, footer a:hover{background: #575757;}
+header a:active, footer a:active{background: #575757;}
+
+main{margin: 0 10%;}
+
+blockquote{
+    font-size: 2em;
+    font-style: italic;
+    text-align: center;
+    padding: 1em;
+    background: #dddddd;
+    border-radius: 5px;
+    margin: 1rem 0px
+}
+
+h2{font-size: 2em;}
+
+h3 a{
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+h3 a:link, #contact a:link{color: black;}
+h3 a:visited, #contact a:visited{color: black;}
+h3 a:focus, #contact a:focus{color: black; text-decoration: underline;}
+h3 a:hover, #contact a:hover{color: black; text-decoration: underline;}
+h3 a:active, #contact a:active{color: black; text-decoration: underline; border: dotted 1px black}
+
+section{
+    border-bottom: solid 1px #575757;
+    padding-bottom: .5rem;
+}
+
+.project{
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#second-project .project-image{order: -1;}
+
+.project-image{
+    max-width: 650px;
+    height: auto;
+}
+
+.project-description{margin: 1rem 0;}
+
+@media screen and (min-width: 1200px)
+{
+    .project{flex-direction: row;}
+
+    #second-project .project-image{order: 1;}
+
+    .project-description{margin: 0 1rem;}
+}
+
+#resume{
+    display: flex;
+    flex-direction: column;
+}
+
+#resume i{
+    margin: 1rem .25rem 1rem 0;
+    color: rgb(221, 1, 1);
+    font-size: 1.5rem;
+}
+
+embed{
+    position: relative;
+    left: -9999px;
+    height: 1vh;
+}
+
+@media screen and (min-width: 1425px){
+    embed{
+        position: static;
+        align-self: center;
+        width: 100%;
+        height: 70vh;
+        margin-bottom: 1rem;
+    }
+}
+
+#resume a:link{color:black; text-decoration: none;}
+#resume a:visited{color:black; text-decoration: none;}
+#resume a:focus{color:black; text-decoration: underline;}
+#resume a:hover{color:black; text-decoration: underline;}
+#resume a:active{color:black; text-decoration: underline; border: dotted 1px black;}
+
+section#bio{
+    display: grid;
+    grid-template-rows: .5fr 1.5fr .5fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: "about-me" 
+                         "image"
+                         "contact";
+    margin-bottom: 1rem;
+}
+
+#about-me-text{
+    grid-area: about-me;
+    margin-top: 0;
+    margin-right: 1rem;
+}
+
+#bio-image{
+    grid-area: image;
+    justify-self: left;
+    max-width: 480px;
+    width: 100%;
+    height: auto;
+    border: solid 5px #575757;
+    margin-bottom: 1rem;
+}
+
+#contact{
+    grid-area: contact;
+    font-size: 1.5rem;
+}
+
+#contact-list{
+    list-style-type: none;
+    margin: 1rem 0;
+    padding: 1rem 0;
+}
+
+#contact-list i{margin: 1rem .25rem 1rem 0;}
+
+@media screen and (min-width: 1050px)
+{
+    section#bio{
+        grid-template-rows: .5fr 2fr;
+        grid-template-columns: 1fr .6fr;
+        grid-template-areas: "about-me about-me"
+                             "image    contact";
+    }
+
+    #contact{
+        position: relative;
+        top: 20%;
+    }
+}
+
+@media screen and (min-width: 1250px)
+{
+    section#bio{
+        grid-template-rows: 1fr 2fr;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "about-me image"
+                             "contact  image";
+    }
+
+    #bio-image{
+        grid-area: image;
+        justify-self: right;
+        border: solid 5px #575757;
+        margin-bottom: 1rem;
+    }
+
+    #contact{position: static;}
+
+    #contact-list{
+        margin: 1rem 0;
+        padding: 1rem 0;
+    }
+}
+
+footer{margin-top: 1rem;}

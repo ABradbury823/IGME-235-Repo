@@ -1,0 +1,80 @@
+@font-face {
+    font-family: 'Andy';
+    src: url(../media/fonts/Andy-Bold.woff);
+}
+
+html{
+    font-family: 'Andy', 'Comic Sans', sans-serif;
+    font-size: 24px;
+    color:black; /*Fallback color*/
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke: 1px black;
+    text-shadow: 1px 1px rgb(70, 70, 70);
+}
+
+body{
+    background-image: url(../media/the-guide.jpg);
+    background-repeat: no-repeat;
+    background-color: rgb(49, 49, 49);
+    background-size: 75%;
+    background-position: top;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 31vw;
+    margin: 0 12.5%;
+}
+
+@media screen and (min-width: 1125px)
+{
+body{
+        background-size: 50%;
+        background-position: center;
+        margin: 5% 25%;
+    }
+}
+
+header, div, footer{
+    text-align: center;
+    background-color: rgba(9, 62, 161, 0.5);
+    border-radius: 1rem;
+    border: solid 3px rgba(31, 80, 172, 0.5);
+    margin: .25rem;
+    padding: .25rem;
+}
+
+header p{font-size: 2rem;}
+
+div{
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+}
+
+button{
+    font-family: 'Andy', 'Comic Sans', sans-serif;
+    font-size: 1rem;
+    background: none;
+    border: none;
+    outline: none;
+    color: transparent;
+    -webkit-text-fill-color: rgb(255, 255, 27);
+    -webkit-text-stroke: 1px black;
+    text-shadow: 1px 1px rgb(70, 70, 70);
+    align-self: flex-start;
+    margin: 0 1.5rem;
+}
+
+div blockquote {text-align: left;}
+
+p{margin: .5rem;}
+
+button:focus{-webkit-text-stroke: 1px red; font-size: 1.25rem;}
+button:hover{-webkit-text-stroke: 1px red; font-size: 1.25rem;}
+button:active{-webkit-text-stroke: 1px red; font-size: 1.25rem; outline: none;}
+
+footer{
+    text-align: left;
+    align-self: flex-start;
+}
