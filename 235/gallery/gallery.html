@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+  <title>Image Gallery</title>
+   <style>
+   		body {
+		  font-family: "Helvetica","Arial",serif;
+		  color: #333;
+		  background-color: #fff;
+		  margin: 1em 10%;
+		}
+		
+		#main {
+			padding-top: 30px;
+			width: 400px;
+			margin: 0 auto;
+		}
+		
+   		span[data-image]{
+   			transition-property: opacity;
+   			transition-duration: 0.5s;
+   			color: #c60;
+		  	background-color: transparent;
+		  	font-weight: bold;
+		  	text-decoration: none;
+		  	cursor: pointer;
+   		}
+   		
+   		span[data-image]:hover{
+   			opacity: 0.5;
+   		}
+		
+		h1 {
+		  color: #333;
+		  background-color: transparent;
+		}
+		
+		ul {
+		  padding: 0;
+		}
+		
+		li {
+		  float: left;
+		  padding: 1em;
+		  list-style: none;
+		}
+		
+		img {
+		  display:block;
+		  clear: both;
+		  box-shadow: 7px 7px 5px #888;
+		  border:1px solid #aaa;
+		  transition-property: opacity;
+   		transition-duration: 0.5s;
+		}
+
+		footer{
+			font-size:70%;
+			color:#bbb;
+			text-align:center;
+		}
+   </style>
+</head>
+<body>
+  <section id="main">
+      <h1>Snapshots</h1>
+      <ul>
+        <li><span data-image="cassie.jpg" title="A black dog">Cassie</span></li>
+        <li><span data-image="seal.jpg" title="A very happy seal">Seal</span></li>
+        <li><span data-image="wolf.jpg" title="A snow-colored wolf">Wolf</span></li>
+        <li><span data-image="eagle.jpg" title="A bald eagle in a snowy woods">Eagle</span></li>
+      </ul>
+      <div id="imagewrapper">
+        <img id="placeholder" src="images/placeholder.gif" alt="my image gallery" />
+      </div>
+       <p id="description">Choose an image.</p>
+     <footer>
+        <p>For IGME-235 Intro to Game Web Tech</p>
+     </footer>
+    </section>
+    <script>
+	let imageBox = document.querySelector("img[id=placeholder]");
+	let imageList = document.querySelectorAll("li span");
+
+	let changeImage = (e) =>
+	{
+		imageBox.setAttribute("src", "images/" + e.target.dataset.image);
+		
+		//highlight the current image being viewed
+		for(let image of imageList)
+		{
+			if(image == e.target){
+				image.style.backgroundColor = "#bde8e6";
+				image.style.padding = ".5rem";
+				image.style.borderRadius = ".5rem";
+				image.style.border = "solid 1px black";
+			}
+			else{
+				image.style.backgroundColor = "transparent";
+				image.style.padding = "0";
+				image.style.border = "none";
+			}
+		}
+	}
+
+	for(let image of imageList)
+	{
+		image.addEventListener("click", changeImage);
+	}
+	</script>
+	   
+</body>
+</html>
