@@ -11,6 +11,7 @@ document.body.appendChild(app.view);
 const sceneWidth = app.view.width;
 const sceneHeight = app.view.height;	
 
+/*
 // pre-load the images
 app.loader.
     add([
@@ -20,6 +21,7 @@ app.loader.
 app.loader.onProgress.add(e => { console.log(`progress=${e.progress}`) });
 app.loader.onComplete.add(setup);
 app.loader.load();
+*/
 
 // aliases
 let stage;
@@ -63,8 +65,8 @@ function setup() {
     function createLabelsAndButtons(){
         let buttonStyle = new PIXI.TextStyle({
             fill: 0xFF0000,
-            fontSize: 48,
-            fontFamily: "Verdana"
+            fontSize: 20,
+            fontFamily: "Press Start 2P"
         });
 
         //--set up start scene--
@@ -72,8 +74,8 @@ function setup() {
         let startLabel1 = new PIXI.Text("Circle Blast!");
         startLabel1.style = new PIXI.TextStyle({
             fill: 0xFFFFFF,
-            fontSize: 96,
-            fontFamily: "Verdana",
+            fontSize: 40,
+            fontFamily: "Press Start 2P",
             stroke: 0xFF0000,
             strokeThickness: 6
         });
@@ -85,13 +87,13 @@ function setup() {
         let startLabel2 = new PIXI.Text("R U worthy...?");
         startLabel2.style = new PIXI.TextStyle({
             fill: 0xFFFFFF,
-            fontSize: 32,
-            fontFamily: "Verdana",
+            fontSize: 24,
+            fontFamily: "Press Start 2P",
             fontStyle: "italic",
             stroke: 0xFF0000,
             strokeThickness: 6
         });
-        startLabel2.x = 185;
+        startLabel2.x = 150;
         startLabel2.y = 300;
         startScene.addChild(startLabel2);
 
@@ -110,8 +112,8 @@ function setup() {
         //--set up game scene--
         let textStyle = new PIXI.TextStyle({
             fill:0xFFFFFF,
-            fontSize: 18,
-            fontFamily: "Verdana",
+            fontSize: 16,
+            fontFamily: "Press Start 2P",
             stroke: 0xFF0000,
             strokeThickness: 4
         });
@@ -128,22 +130,22 @@ function setup() {
         lifeLabel = new PIXI.Text();
         lifeLabel.style = textStyle;
         lifeLabel.x = 5;
-        lifeLabel.y = 26;
+        lifeLabel.y = 35;
         gameScene.addChild(lifeLabel);
         decreaseLifeBy(0);
 
         //--set up `gameOverScene`--
         //make game over text
-        let gameOverText = new PIXI.Text("Game Over!\n        :-O");
+        let gameOverText = new PIXI.Text("Game Over!\n\n   :-(");
         textStyle = new PIXI.TextStyle({
 	        fill: 0xFFFFFF,
-	        fontSize: 64,
-	        fontFamily: "Futura",
+	        fontSize: 48,
+	        fontFamily: "Press Start 2P",
 	        stroke: 0xFF0000,
 	        strokeThickness: 6
         });
         gameOverText.style = textStyle;
-        gameOverText.x = 125;
+        gameOverText.x = 75;
         gameOverText.y = sceneHeight/2 - 160;
         gameOverScene.addChild(gameOverText);
 
@@ -151,19 +153,18 @@ function setup() {
         gameOverScoreLabel = new PIXI.Text("Your final score: ")
         gameOverScoreLabel.style = new PIXI.TextStyle({
 	        fill: 0xFFFFFF,
-	        fontSize: 36,
-	        fontFamily: "Futura",
+	        fontSize: 22,
+	        fontFamily: "Press Start 2P",
 	        stroke: 0xFF0000,
 	        strokeThickness: 6
         });
-        gameOverScoreLabel.x = 150;
+        gameOverScoreLabel.x = 100;
         gameOverScoreLabel.y = sceneHeight/2 + 50;
-        //gameOverScene.addChild(gameOverScoreLabel);
 
         //make "play again?" button
         let playAgainButton = new PIXI.Text("Play Again?");
         playAgainButton.style = buttonStyle;
-        playAgainButton.x = 150;
+        playAgainButton.x = 200;
         playAgainButton.y = sceneHeight - 100;
         playAgainButton.interactive = true;
         playAgainButton.buttonMode = true;
@@ -220,7 +221,7 @@ function increaseScoreBy(value){
 function decreaseLifeBy(value){
     life -= value;
     life = parseInt(life);
-    lifeLabel.text = `Life     ${life}%`;
+    lifeLabel.text = `Life   ${life}%`;
 }
 
 function gameLoop(){
@@ -252,13 +253,13 @@ function gameLoop(){
 	for (let c of circles){
         c.move(dt);
         if(c.x <= c.radius || c.x >= sceneWidth - c.radius){
-            c.reflectX();
-            c.move(dt);
+            c.reflectX(sceneWidth);
+            //c.move(dt);
         }
 
         if(c.y <= c.radius || c.y >= sceneHeight - c.radius){
-            c.reflectY();
-            c.move(dt);
+            c.reflectY(sceneHeight);
+            //c.move(dt);
         }
     }
 	
@@ -314,12 +315,74 @@ function gameLoop(){
 }
 
 function createCircles(numCircles){
-    for(let i = 0; i < numCircles; i++){
+    //standard bouncing circles - yellow
+    for(let i = 0; i < numCircles/4; i++){
         let c = new Circle(10, 0xFFFF00);
         c.x = Math.random() * (sceneWidth - 50) + 25;
         c.y = Math.random() * (sceneHeight - 400) + 25;
         circles.push(c);
         gameScene.addChild(c);
+    }
+
+    //orthogonal circles - cyan
+    for(let i = 0; i < numCircles/4; i++){
+        let c = new Circle(10, 0x00FFFF);
+        c.speed = Math.random() * 100 + 100;
+        //vertical
+        if(Math.random() < .5){
+            c.x = Math.random() * (sceneWidth - 50) + 25;
+            c.y = Math.random() * 100 + c.radius;
+            c.forward = {x:0, y:1};
+        }
+        //horizontal
+        else{
+            c.x = Math.random() * 25 + c.radius;
+            c.y = Math.random() * (sceneHeight - 80) + c.radius;
+            c.forward = {x:1, y:0};
+        }
+        circles.push(c);
+        gameScene.addChild(c);
+    }
+
+    //wrapping circles - purple
+    for(let i = 0; i < numCircles / 4; i++){
+        let c = new WrappingCircle(10, 0xFF00FF);
+        c.x = Math.random() * (sceneWidth - 50) + 25;
+        c.y = Math.random() * (sceneHeight - 400) + 25;
+        c.speed = 60;
+        circles.push(c);
+        gameScene.addChild(c);
+    }
+
+    //seeking circles - red
+    for(let i = 0; i < numCircles/4; i++){
+        let c = new SeekingCircle(5, 0xFF0000);
+        c.x = Math.random() * (sceneWidth - 50) + 25;
+        c.y = Math.random() * (sceneHeight - 400) + 25;
+        c.speed = 60;
+        c.activate(ship);
+        circles.push(c);
+        gameScene.addChild(c);
+    }
+
+    //orthogonal wrapping circles - green
+    for(let i=0;i<numCircles/4;i++){	
+	    let c = new WrappingCircle(10,0x00FF00);
+	    c.speed = Math.random() * 100 + 100;
+        //vertical
+	    if (Math.random()<.5){
+		    c.x = Math.random() * (sceneWidth - 50) + 25;
+		    c.y = Math.random() * 100 + c.radius;
+		    c.fwd = {x:0,y:1}
+	    }
+        //horizontal
+        else{
+		    c.x = Math.random() * 25 + c.radius * 2;
+		    c.y = Math.random() * (sceneHeight - 80) + c.radius;
+		    c.fwd = {x:1,y:0};
+	    }
+	    circles.push(c);
+	    gameScene.addChild(c);
     }
 }
 
