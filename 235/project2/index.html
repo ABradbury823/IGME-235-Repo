@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokémon Type Matchups</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/populate-drop-down.js"></script>
+    <script src="js/generate-type-matchup.js"></script>
 </head>
 <body>
     <h1>Pokémon Matchups</h1>
@@ -20,7 +23,10 @@
             <option value="">Type 2 (optional)</option>
             <!--Fill this in with JavaScript-->
         </select>
+        <button type="button" id="generate">Generate Type Matchup</button>
     </div>
+
+    <p id="status"><b>Type has not been selected yet</b></p>
 
     <div id="attacking">
         <h2>When Attacking:</h2>
@@ -51,8 +57,8 @@
     <div id="examples">
         <h2>Example Pokémon:</h2>
         <div id="example-filters">
-            <label for="resultsNum">Number of Results:</label>
-            <select name="resultsNum" id="resultsNum">
+            <label for="limit">Number of Results:</label>
+            <select name="limit" id="limit">
                 <option value=3>3</option>
                 <option value=5>5</option>
                 <option value=10>10</option>
@@ -61,25 +67,29 @@
 
             <label for="region">Region:</label>
             <select name="region" id="region">
-                <option value=1>Kanto (Gen I)</option>
-                <option value=2>Johto (Gen II)</option>
-                <option value=3>Hoenn (Gen III)</option>
-                <option value=4>Sinnoh (Gen IV)</option>
-                <option value=5>Unova (Gen V)</option>
-                <option value=6>Kalos (Gen VI)</option>
-                <option value=7>Alola (Gen VII)</option>
+                <option value="national">National Dex (All)</option> <!--Ends: 898-->
+                <option value="0">Kanto (Gen I)</option> <!--Ends: 151-->
+                <option value="151">Johto (Gen II)</option> <!--Ends: 251-->
+                <option value="251">Hoenn (Gen III)</option> <!--Ends: 386-->
+                <option value="386">Sinnoh (Gen IV)</option> <!--Ends: 493-->
+                <option value="493">Unova (Gen V)</option> <!--Ends: 649-->
+                <option value="649">Kalos (Gen VI)</option> <!--Ends: 721-->
+                <option value="721">Alola (Gen VII)</option> <!--Ends: 809-->
+                <option value="809">Galar (Gen VIII)</option> <!--Ends: 898-->
             </select>
         </div>
 
         <div id="example-results">
+            <!--
             <div id="example" style="border: solid 1px black;">
-                <p id="name">Name</p>
+                <p id="name">#Dex Name</p>
                 <img src="" alt="Pokémon Image">
                 <p id="type">Type 1 (Type 2)</p>
             </div>
+            -->
 
-            <button type="button" id="previous-examples">Prev</button>
-            <button type="button" id="next-examples">Next</button>
+            <button type="button" id="previous-examples" disabled>Prev</button>
+            <button type="button" id="next-examples" disabled>Next</button>
         </div>
     </div>
 
