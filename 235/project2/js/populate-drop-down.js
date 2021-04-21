@@ -1,16 +1,18 @@
-window.addEventListener("load", populateOnLoad);
+window.addEventListener("load", generateTypesURL);
 
 const POKEAPI_URL = "https://pokeapi.co/api/v2/";
 
-//called upon program start to populate drop down lists
-function populateOnLoad(){
+//PURPOSE: generate url for api to retrieve types
+//ARGUMENTS: --
+function generateTypesURL(){
     let url = POKEAPI_URL + "type/";
     //console.log(url);
 
     getTypeData(url);
 }
 
-//retrieve data from the api
+//PURPOSE: retrieve type data from the api
+//ARGUMENTS: url to the api to request data from
 function getTypeData(url){
     let xhr = new XMLHttpRequest()
 
@@ -21,7 +23,8 @@ function getTypeData(url){
     xhr.send();
 }
 
-//adds all types to dropdown lists
+//PURPOSE: adds all types to dropdown lists
+//ARGUMENTS: an XMLHttpRequest containing type data
 function populateDropDown(e){
     let xhr = e.target;
     //console.log(xhr.responseText);
@@ -47,15 +50,20 @@ function populateDropDown(e){
     }
 }
 
-//runs if there is an error retrieving data from the api
+//PURPOSE: displays an error message in the console
+//ARGUMENTS: XMLHttpRequest that caused the error
 function dataTypeError(e){
     console.log("There was an error loading the types!")
 }
 
-//capitalizes the first letter of a given string and returns the new string
+//PURPOSE: capitalizes the first letter of a given string
+//ARGUMENTS: the string to be capitalized
+//RETURNS: a string with the first letter capitalized (returns empty string if the argument was an empty string)
 function capitalizeFirstLetter(string){
+    //can't capitalize an empty string!
     if(string.length == 0) return string;
 
+    //slice up string and send back a new string with capital first letter
     let firstLetter = string.slice(0, 1);
     let remainingString = string.slice(1, string.length);
     let newString = firstLetter.toUpperCase() + remainingString;
