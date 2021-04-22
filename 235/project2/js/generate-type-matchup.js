@@ -3,6 +3,7 @@ window.addEventListener("load", (e) => {document.querySelector("#type1").onchang
 
 let type1 = "";
 let type2 = "";
+let lists = null;
 
 //PURPOSE:sets up api url when the generate button has been clicked
 //ARGUMENTS: --
@@ -16,6 +17,10 @@ function generateButtonClicked(){
 
     type2 = document.querySelector("#type2").value;
     //console.log(`Type 1: ${type2} (button clicked)`);
+
+    //clear lists before starting (remove past input)
+    lists = document.querySelectorAll("ul");
+    clearLists(lists);
 
     //update status based on what types are selected
     //nothing is selected or only type 2 is selected
@@ -77,33 +82,32 @@ function dataMatchupLoaded(e){
     //2xdmg_to, .5xdmg_to, 0dmg_to, 2xdmg_from, .5dmg_from, 0dmg_from
     let reorderedArray = reorderArray(Object.entries(damageRelations));
     //console.log(reorderedArray);
-
-    //sort damage relations into proper div list
-    let lists = document.querySelectorAll("ul");
     
+    //sort types into just names
+    let types = [];
+    for(let i = 0; i < lists.length; i++){
+        types[i] = [];
+        for(let j = 0; j < reorderedArray[i].length; j++){
+            types[i].push(reorderedArray[i][j].name);
+        }
+    }
+    //console.log(types);
+    
+    for(let i = 0; i < lists.length; i++){
+        addArrayToList(types[i], lists[i]);
+    }
+
     //update status
     if(type2 == ""){
-        //clear lists before adding more entries
-        for(let i = 0; i < lists.length; i++){
-            while(lists[i].firstChild){
-            lists[i].removeChild(lists[i].firstChild);
-            }
-        }
-
-        for(let i = 0; i < lists.length; i++){
-            addArrayToList(reorderedArray[i], lists[i]);
-        }
-
         document.querySelector("#status").innerHTML = 
         `<b>Here are the type matchups for ${capitalizeFirstLetter(type1)} types:</b>`;
     }
     else{
-        for(let i = 0; i < lists.length; i++){
-            addArrayToList(reorderedArray[i], lists[i]);
-        }
-
         //TODO: remove repeated types (offensive + defensive), negate types that are super effective and not very effective(defensive),
         //remove types that have no effect from super effective and not very effective list
+        for(let i = 0; i < lists.length; i++){
+            removeDuplicates(lists[i]);
+        }
 
         document.querySelector("#status").innerHTML = 
         `<b>Here are the type matchups for ${capitalizeFirstLetter(type1)} and ${capitalizeFirstLetter(type2)} types:</b>`;
@@ -114,6 +118,14 @@ function dataMatchupLoaded(e){
 //ARGUMENTS: XMLHttpRequest that caused the error
 function dataMatchupError(e){
     console.log("An occurred while loading type matchups!");
+}
+
+function clearLists(nodeList){
+    for(let i = 0; i < nodeList.length; i++){
+        while(nodeList[i].firstChild){
+            nodeList[i].removeChild(nodeList[i].firstChild);
+        }
+    }
 }
 
 //PURPOSE: sort damage relations into the correct order
@@ -145,12 +157,21 @@ function addArrayToList(array, list){
 
     //add a new li element into the proper list
     for(let i = 0; i < array.length; i++){
-        let type = array[i].name;
+        let type = array[i];
         let newLi = document.createElement("li");
         newLi.innerText = capitalizeFirstLetter(type);
         list.appendChild(newLi);
     }
 
+}
+
+function removeDuplicates(list){
+    if(list.childElementCount == 0){return;}
+
+    //look for duplicate
+    for(let i = 0; i < list.childElementCount; i++){
+        
+    }
 }
 
 //PURPOSE: updates type2 list when type1 dropdown selection is changed
