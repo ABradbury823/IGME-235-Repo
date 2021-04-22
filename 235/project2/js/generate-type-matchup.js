@@ -36,7 +36,7 @@ function generateButtonClicked(){
 
         //retrieve data for both types
         getMatchupData(url1);
-        //getMatchupData(url2);
+        getMatchupData(url2);
     }
 
     //only type 1 has been only
@@ -76,28 +76,35 @@ function dataMatchupLoaded(e){
     //sort the damage relations so they match the page's layout:
     //2xdmg_to, .5xdmg_to, 0dmg_to, 2xdmg_from, .5dmg_from, 0dmg_from
     let reorderedArray = reorderArray(Object.entries(damageRelations));
-    console.log(reorderedArray);
+    //console.log(reorderedArray);
 
     //sort damage relations into proper div list
     let lists = document.querySelectorAll("ul");
-
-    //clear lists before adding more entries
-    for(let i = 0; i < lists.length; i++){
-        while(lists[i].firstChild){
-            lists[i].removeChild(lists[i].firstChild);
-        }
-    }
-
-    for(let i = 0; i < lists.length; i++){
-        addArrayToList(reorderedArray[i], lists[i]);
-    }
     
     //update status
     if(type2 == ""){
+        //clear lists before adding more entries
+        for(let i = 0; i < lists.length; i++){
+            while(lists[i].firstChild){
+            lists[i].removeChild(lists[i].firstChild);
+            }
+        }
+
+        for(let i = 0; i < lists.length; i++){
+            addArrayToList(reorderedArray[i], lists[i]);
+        }
+
         document.querySelector("#status").innerHTML = 
         `<b>Here are the type matchups for ${capitalizeFirstLetter(type1)} types:</b>`;
     }
     else{
+        for(let i = 0; i < lists.length; i++){
+            addArrayToList(reorderedArray[i], lists[i]);
+        }
+
+        //TODO: remove repeated types (offensive + defensive), negate types that are super effective and not very effective(defensive),
+        //remove types that have no effect from super effective and not very effective list
+
         document.querySelector("#status").innerHTML = 
         `<b>Here are the type matchups for ${capitalizeFirstLetter(type1)} and ${capitalizeFirstLetter(type2)} types:</b>`;
     }
