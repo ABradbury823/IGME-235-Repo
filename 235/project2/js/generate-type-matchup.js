@@ -4,6 +4,7 @@ window.addEventListener("load", (e) => {document.querySelector("#type1").onchang
 let type1 = "";
 let type2 = "";
 let lists = null;
+let isType1Added = false;
 
 //PURPOSE:sets up api url when the generate button has been clicked
 //ARGUMENTS: --
@@ -20,7 +21,9 @@ function generateButtonClicked(){
 
     //clear lists before starting (remove past input)
     lists = document.querySelectorAll("ul");
-    clearLists(lists);
+    for(let i = 0; i < lists.length; i++){clearList(lists[i]);}
+
+    isType1Added = false;
 
     //update status based on what types are selected
     //nothing is selected or only type 2 is selected
@@ -44,7 +47,7 @@ function generateButtonClicked(){
         getMatchupData(url2);
     }
 
-    //only type 1 has been only
+    //only type 1 has been selected
     else if(type1 != "" && type2 == ""){
         document.querySelector("#status").innerHTML = 
         `<b>Retrieving type matchups for ${capitalizeFirstLetter(type1)} types...</b>`;
@@ -105,9 +108,17 @@ function dataMatchupLoaded(e){
     else{
         //TODO: remove repeated types (offensive + defensive), negate types that are super effective and not very effective(defensive),
         //remove types that have no effect from super effective and not very effective list
-        for(let i = 0; i < lists.length; i++){
-            removeDuplicates(lists[i]);
+        if(isType1Added){   //only check for duplicates after type 2 has been added
+            for(let i = 0; i < lists.length; i++){
+                removeDuplicates(lists[i]);
+            }
+
+            let vulnerableTo = lists[3];
+            let resistantTo = lists[4];
+            let immuneTo = lists[5];
         }
+
+        else{isType1Added = true;}
 
         document.querySelector("#status").innerHTML = 
         `<b>Here are the type matchups for ${capitalizeFirstLetter(type1)} and ${capitalizeFirstLetter(type2)} types:</b>`;
@@ -120,11 +131,11 @@ function dataMatchupError(e){
     console.log("An occurred while loading type matchups!");
 }
 
-function clearLists(nodeList){
-    for(let i = 0; i < nodeList.length; i++){
-        while(nodeList[i].firstChild){
-            nodeList[i].removeChild(nodeList[i].firstChild);
-        }
+//PURPOSE: clears the type relationship lists
+//ARGUMENTS: a node list containing all of the lists on the page
+function clearList(list){
+    while(list.firstChild){
+        list.removeChild(list.firstChild);
     }
 }
 
@@ -165,13 +176,26 @@ function addArrayToList(array, list){
 
 }
 
+//PURPOSE: remove types that show up multiple times in the same list
+//ARGUMENTS: the list to check for duplicates in
 function removeDuplicates(list){
     if(list.childElementCount == 0){return;}
 
-    //look for duplicate
+    let sortedArray = [];
+
+    //look for duplicates
     for(let i = 0; i < list.childElementCount; i++){
-        
+        //only add to array if it doesn't exist already
+        if(!sortedArray.includes(list.childNodes[i].innerText)){
+            sortedArray.push(list.childNodes[i].innerText);
+        }
+        //remove it if it is a duplicate
+        else{
+            list.removeChild(list.childNodes[i]);
+            i--;
+        }
     }
+    //console.log(sortedArray);
 }
 
 //PURPOSE: updates type2 list when type1 dropdown selection is changed
