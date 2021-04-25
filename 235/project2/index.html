@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="js/populate-drop-down.js"></script>
     <script src="js/generate-type-matchup.js"></script>
+    <script src="js/generate-examples.js"></script>
+    <script src="js/slider.js"></script>
 </head>
 <body>
     <h1>Pokémon Matchups</h1>
@@ -58,16 +60,12 @@
         <h2>Example Pokémon:</h2>
         <div id="example-filters">
             <label for="limit">Number of Results:</label>
-            <select name="limit" id="limit">
-                <option value=3>3</option>
-                <option value=5>5</option>
-                <option value=10>10</option>
-                <option value=20>20</option>
-            </select>
-
+            <input type="range" min="1" max="6" value="3" id="limit">
+            <input type="number" min="1" max="6" value="3" id="limit-value">
+            <br>
             <label for="region">Region:</label>
             <select name="region" id="region">
-                <option value="national">National Dex (All)</option> <!--Ends: 898-->
+                <option value="0">National Dex (All)</option> <!--Ends: 898-->
                 <option value="0">Kanto (Gen I)</option> <!--Ends: 151-->
                 <option value="151">Johto (Gen II)</option> <!--Ends: 251-->
                 <option value="251">Hoenn (Gen III)</option> <!--Ends: 386-->
@@ -80,6 +78,8 @@
         </div>
 
         <div id="example-results">
+            <p id="examples-status"><b>Type has not been selected yet</b></p>
+
             <!--
             <div id="example" style="border: solid 1px black;">
                 <p id="name">#Dex Name</p>
@@ -87,7 +87,7 @@
                 <p id="type">Type 1 (Type 2)</p>
             </div>
             -->
-
+            
             <button type="button" id="previous-examples" disabled>Prev</button>
             <button type="button" id="next-examples" disabled>Next</button>
         </div>

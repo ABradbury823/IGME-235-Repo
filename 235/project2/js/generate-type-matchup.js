@@ -1,4 +1,4 @@
-window.addEventListener( "load",(e) => {document.querySelector("#generate").onclick = generateButtonClicked});
+window.addEventListener("load", (e) => {document.querySelector("#generate").onclick = generateButtonClicked});
 window.addEventListener("load", (e) => {document.querySelector("#type1").onchange = dropDownSelectionChanged});
 
 let type1 = "";
@@ -11,7 +11,7 @@ let isType1Added = false;
 function generateButtonClicked(){
     //console.log("Generate button clicked!")
     let url1 = POKEAPI_URL + "type/"    //url for type1
-    let url2 = POKEAPI_URL + "type/"    //option url for type2
+    let url2 = POKEAPI_URL + "type/"    //optional url for type2
 
     type1 = document.querySelector("#type1").value;
     //console.log(`Type 1: ${type1} (button clicked)`);
@@ -63,7 +63,8 @@ function generateButtonClicked(){
 function getMatchupData(url){
     let xhr = new XMLHttpRequest();
 
-	xhr.onload = dataMatchupLoaded;
+	xhr.addEventListener("load", dataMatchupLoaded);
+    xhr.addEventListener("load", dataExampleLoaded);
 	xhr.onerror = dataMatchupError;
 
 	xhr.open("GET", url);
