@@ -106,18 +106,45 @@ function dataMatchupLoaded(e){
         `<b>Here are the type matchups for ${capitalizeFirstLetter(type1)} types:</b>`;
     }
     else{
-        //TODO: remove repeated types (offensive + defensive), negate types that are super effective and not very effective(defensive),
+        //remove repeated types (offensive + defensive), negate types that are super effective and not very effective(defensive),
         //remove types that have no effect from super effective and not very effective list
-        if(isType1Added){   //only check for duplicates after type 2 has been added
+
+        //only check for duplicates and other errors after type 1 has been added
+        if(isType1Added){
             for(let i = 0; i < lists.length; i++){
                 removeDuplicates(lists[i]);
             }
 
-            let vulnerableTo = lists[3];
-            let resistantTo = lists[4];
-            let immuneTo = lists[5];
+            //convert to lists for indexing
+            let vulnerableTo = listToArray(lists[3]);
+            let resistantTo = listToArray(lists[4]);
+            let immuneTo = listToArray(lists[5]);
+
+
+            //vulnerable and resistant - remove both
+            for(let i = 0; i < lists[3].childElementCount; i++){
+                if(resistantTo.includes(vulnerableTo[i])){
+                    for(let j = 0; j < lists[4].childElementCount; j ++){
+                        if(lists[4].childNodes[j].innerText == vulnerableTo[i]){
+                            lists[4].removeChild(lists[4].childNodes[j])    //remove from resistant
+                            resistantTo.splice(j, 1);
+                            break;  //each type can only show up once, so no need to keep checking
+                        }
+                    }
+                    lists[3].removeChild(lists[3].childNodes[i]);   //remove from vulnerable
+                    vulnerableTo.splice(i, 1);
+                    i--;
+                }
+            }
+
+            //vulnerable and immune - remove from vulnerable
+
+
+            //resistant and immune - remove from resistant
+            
         }
 
+        //this happens when the first type is done
         else{isType1Added = true;}
 
         document.querySelector("#status").innerHTML = 
@@ -131,8 +158,8 @@ function dataMatchupError(e){
     console.log("An occurred while loading type matchups!");
 }
 
-//PURPOSE: clears the type relationship lists
-//ARGUMENTS: a node list containing all of the lists on the page
+//PURPOSE: clears all entries in a list
+//ARGUMENTS: a list to be cleared
 function clearList(list){
     while(list.firstChild){
         list.removeChild(list.firstChild);
@@ -196,6 +223,18 @@ function removeDuplicates(list){
         }
     }
     //console.log(sortedArray);
+}
+
+//PURPOSE: converts a list element into an array
+//ARGUMENTS: the list to be converted
+//RETURNS: an array containing the string values of each list entry
+function listToArray(list){
+    let newArray = [];
+
+    for(let i = 0; i < list.childElementCount; i++){
+        newArray.push(list.childNodes[i].innerText);
+    }
+    return newArray;
 }
 
 //PURPOSE: updates type2 list when type1 dropdown selection is changed
