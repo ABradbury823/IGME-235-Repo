@@ -122,11 +122,11 @@ function dataMatchupLoaded(e){
 
 
             //vulnerable and resistant - remove both
-            for(let i = 0; i < lists[3].childElementCount; i++){
+            for(let i = 0; i < vulnerableTo.length; i++){
                 if(resistantTo.includes(vulnerableTo[i])){
-                    for(let j = 0; j < lists[4].childElementCount; j ++){
+                    for(let j = 0; j < resistantTo.length; j ++){
                         if(lists[4].childNodes[j].innerText == vulnerableTo[i]){
-                            lists[4].removeChild(lists[4].childNodes[j])    //remove from resistant
+                            lists[4].removeChild(lists[4].childNodes[j]);    //remove from resistant
                             resistantTo.splice(j, 1);
                             break;  //each type can only show up once, so no need to keep checking
                         }
@@ -137,10 +137,23 @@ function dataMatchupLoaded(e){
                 }
             }
 
-            //vulnerable and immune - remove from vulnerable
-
+            //vulnerable and immune
+            for(let i = 0; i < vulnerableTo.length; i++){
+                if(immuneTo.includes(vulnerableTo[i])){
+                    lists[3].removeChild(lists[3].childNodes[i]);   //remove from vulnerable
+                    vulnerableTo.splice(i, 1)
+                    i--;
+                }
+            }
 
             //resistant and immune - remove from resistant
+            for(let i = 0; i < resistantTo.length; i++){
+                if(immuneTo.includes(resistantTo[i])){
+                    lists[4].removeChild(lists[4].childNodes[i]);   //remove from resistant
+                    resistantTo.splice(i, 1);
+                    i--;
+                }
+            }
             
         }
 
