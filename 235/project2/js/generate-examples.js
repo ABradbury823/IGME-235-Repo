@@ -1,6 +1,7 @@
 let limit = 0;
 let regionStartOffset = 0;
-let currentPageOffset = 0;
+let currentPageOffset1 = 0;
+let currentPageOffset2 = 0;
 let isType1 = true;
 
 function dataExampleLoaded(e){
@@ -13,16 +14,35 @@ function dataExampleLoaded(e){
     limit = document.querySelector("#limit").value;
     regionStartOffset = document.querySelector("#region").value;
 
-    document.querySelector("#examples-status1").innerHTML = `<b>Searching for ${capitalize(type1)} type Pokémon...</b>`;
-
-    //examplePokemon has just pokemon name and url
-    for(let i = currentPageOffset; i < currentPageOffset + limit; i++){
-        if(i < examplePokemon.length){
-        getPokemonData(examplePokemon[i].pokemon.url);
+    //update to searching status and search for requested type pokemon
+    if(isType1){
+        document.querySelector("#examples-status1").innerHTML = `<b>Searching for ${capitalize(type1)} type Pokémon...</b>`;
+        //example Pokemon has just pokemon name and url
+        //find pokemon with another request
+        for(let i = currentPageOffset1; i < currentPageOffset1 + limit; i++){
+            if(i < examplePokemon.length){
+            getPokemonData(examplePokemon[i].pokemon.url);
+            }
+        }
+    }
+    else{
+        document.querySelector("#examples-status2").innerHTML = `<b>Searching for ${capitalize(type2)} type Pokémon...</b>`;
+        for(let i = currentPageOffset2; i < currentPageOffset2 + limit; i++){
+            if(i < examplePokemon.length){
+            getPokemonData(examplePokemon[i].pokemon.url);
+            }
         }
     }
 
-    document.querySelector("#examples-status1").innerHTML = `<b>${examplePokemon.length} results found for ${capitalize(type1)} type Pokémon:</b>`
+    //update to found status
+    if(isType1){
+        document.querySelector("#examples-status1").innerHTML = 
+            `<b>${examplePokemon.length} results found for ${capitalize(type1)} type Pokémon:</b>`
+    }
+    else{
+        document.querySelector("#examples-status2").innerHTML = 
+            `<b>${examplePokemon.length} results found for ${capitalize(type2)} type Pokémon:</b>`
+    }
 
     if(type2 != ""){isType1 = !isType1;}
 
