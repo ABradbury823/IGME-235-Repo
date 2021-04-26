@@ -43,8 +43,8 @@ function populateDropDown(e){
         let newOption2 = document.createElement("option");
         newOption1.value = type;
         newOption2.value = type;
-        newOption1.text = capitalizeFirstLetter(type);
-        newOption2.text = capitalizeFirstLetter(type);
+        newOption1.text = capitalize(type);
+        newOption2.text = capitalize(type);
         type1DropDown.appendChild(newOption1);
         type2DropDown.appendChild(newOption2);
     }
@@ -59,7 +59,7 @@ function dataTypeError(e){
 //PURPOSE: capitalizes the first letter of a given string
 //ARGUMENTS: the string to be capitalized
 //RETURNS: a string with the first letter capitalized (returns empty string if the argument was an empty string)
-function capitalizeFirstLetter(string){
+function capitalize(string){
     //can't capitalize an empty string!
     if(string.length == 0) return string;
 

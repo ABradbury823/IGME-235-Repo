@@ -65,28 +65,22 @@
             <br>
             <label for="region">Region:</label>
             <select name="region" id="region">
-                <option value="0">National Dex (All)</option> <!--Ends: 898-->
-                <option value="0">Kanto (Gen I)</option> <!--Ends: 151-->
-                <option value="151">Johto (Gen II)</option> <!--Ends: 251-->
-                <option value="251">Hoenn (Gen III)</option> <!--Ends: 386-->
-                <option value="386">Sinnoh (Gen IV)</option> <!--Ends: 493-->
-                <option value="493">Unova (Gen V)</option> <!--Ends: 649-->
-                <option value="649">Kalos (Gen VI)</option> <!--Ends: 721-->
-                <option value="721">Alola (Gen VII)</option> <!--Ends: 809-->
-                <option value="809">Galar (Gen VIII)</option> <!--Ends: 898-->
+                <option value="0">National Dex (All)</option> <!--0-898-->
+                <option value="0">Kanto (Gen I)</option> <!--0-151-->
+                <option value="151">Johto (Gen II)</option> <!--152-251-->
+                <option value="251">Hoenn (Gen III)</option> <!--252-386-->
+                <option value="386">Sinnoh (Gen IV)</option> <!--387-493-->
+                <option value="493">Unova (Gen V)</option> <!--494-649-->
+                <option value="649">Kalos (Gen VI)</option> <!--650-721-->
+                <option value="721">Alola (Gen VII)</option> <!--722-809-->
+                <option value="809">Galar (Gen VIII)</option> <!--809-898-->
             </select>
         </div>
 
         <div id="example-results">
             <p id="examples-status"><b>Type has not been selected yet</b></p>
 
-            <!--
-            <div id="example" style="border: solid 1px black;">
-                <p id="name">#Dex Name</p>
-                <img src="" alt="Pokémon Image">
-                <p id="type">Type 1 (Type 2)</p>
-            </div>
-            -->
+            <div id="example-pokemon"><!--Fill in with JavaScript--></div>
             
             <button type="button" id="previous-examples" disabled>Prev</button>
             <button type="button" id="next-examples" disabled>Next</button>

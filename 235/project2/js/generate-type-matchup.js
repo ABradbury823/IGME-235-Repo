@@ -22,6 +22,8 @@ function generateButtonClicked(){
     //clear lists before starting (remove past input)
     lists = document.querySelectorAll("ul");
     for(let i = 0; i < lists.length; i++){clearList(lists[i]);}
+    exampleList = document.querySelector("#example-pokemon");
+    clearList(exampleList);
 
     isType1Added = false;
 
@@ -35,7 +37,7 @@ function generateButtonClicked(){
     //both type 1 and type 2 have been selected
     else if(type1 != "" && type2 != ""){
         document.querySelector("#status").innerHTML = 
-        `<b>Retrieving type matchups for ${capitalizeFirstLetter(type1)} and ${capitalizeFirstLetter(type2)} types...</b>`;
+        `<b>Retrieving type matchups for ${capitalize(type1)} and ${capitalize(type2)} types...</b>`;
 
         url1 += type1;
         url2 += type2;
@@ -50,7 +52,7 @@ function generateButtonClicked(){
     //only type 1 has been selected
     else if(type1 != "" && type2 == ""){
         document.querySelector("#status").innerHTML = 
-        `<b>Retrieving type matchups for ${capitalizeFirstLetter(type1)} types...</b>`;
+        `<b>Retrieving type matchups for ${capitalize(type1)} types...</b>`;
 
         url1 += type1
         getMatchupData(url1);
@@ -104,7 +106,7 @@ function dataMatchupLoaded(e){
     //update status
     if(type2 == ""){
         document.querySelector("#status").innerHTML = 
-        `<b>Here are the type matchups for ${capitalizeFirstLetter(type1)} types:</b>`;
+        `<b>Here are the type matchups for ${capitalize(type1)} types:</b>`;
     }
     else{
         //remove repeated types (offensive + defensive), negate types that are super effective and not very effective(defensive),
@@ -162,7 +164,7 @@ function dataMatchupLoaded(e){
         else{isType1Added = true;}
 
         document.querySelector("#status").innerHTML = 
-        `<b>Here are the type matchups for ${capitalizeFirstLetter(type1)} and ${capitalizeFirstLetter(type2)} types:</b>`;
+        `<b>Here are the type matchups for ${capitalize(type1)} and ${capitalize(type2)} types:</b>`;
     }
 }
 
@@ -211,7 +213,7 @@ function addArrayToList(array, list){
     for(let i = 0; i < array.length; i++){
         let type = array[i];
         let newLi = document.createElement("li");
-        newLi.innerText = capitalizeFirstLetter(type);
+        newLi.innerText = capitalize(type);
         list.appendChild(newLi);
     }
 
