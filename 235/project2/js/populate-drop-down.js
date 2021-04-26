@@ -6,7 +6,6 @@ const POKEAPI_URL = "https://pokeapi.co/api/v2/";
 //ARGUMENTS: --
 function generateTypesURL(){
     let url = POKEAPI_URL + "type/";
-    //console.log(url);
 
     getTypeData(url);
 }
@@ -27,11 +26,9 @@ function getTypeData(url){
 //ARGUMENTS: an XMLHttpRequest containing type data
 function populateDropDown(e){
     let xhr = e.target;
-    //console.log(xhr.responseText);
 
     let obj = JSON.parse(xhr.responseText);
     let results = obj.results;
-    //console.log(results);
 
     let type1DropDown = document.querySelector("#type1")
     let type2DropDown = document.querySelector("#type2")

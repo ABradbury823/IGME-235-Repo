@@ -1,7 +1,8 @@
 let limit = 0;
-let regionStartOffset = 0;
+//let regionStartOffset = 0;
 let currentPageOffset1 = 0;
 let currentPageOffset2 = 0;
+let resultsNum = 0;
 let isType1 = true;
 
 function dataExampleLoaded(e){
@@ -9,10 +10,11 @@ function dataExampleLoaded(e){
     
     let obj = JSON.parse(xhr.responseText);
     let examplePokemon = obj.pokemon;
+    resultsNum = examplePokemon.length;
     //console.log(examplePokemon);
 
     limit = document.querySelector("#limit").value;
-    regionStartOffset = document.querySelector("#region").value;
+    //regionStartOffset = document.querySelector("#region").value;
 
     //update to searching status and search for requested type pokemon
     if(isType1){
@@ -28,7 +30,7 @@ function dataExampleLoaded(e){
     else{
         document.querySelector("#examples-status2").innerHTML = `<b>Searching for ${capitalize(type2)} type Pokémon...</b>`;
         for(let i = currentPageOffset2; i < currentPageOffset2 + limit; i++){
-            if(i < examplePokemon.length){
+            if(i < resultsNum){
             getPokemonData(examplePokemon[i].pokemon.url);
             }
         }
@@ -36,16 +38,19 @@ function dataExampleLoaded(e){
 
     //update to found status
     if(isType1){
+        let prevButton = document.querySelector("#previous-examples1");
+        let nextButton = document.querySelector("#next-examples1");
+        activateButtons(prevButton, nextButton, currentPageOffset1);
         document.querySelector("#examples-status1").innerHTML = 
-            `<b>${examplePokemon.length} results found for ${capitalize(type1)} type Pokémon:</b>`
+            `<b>${resultsNum} results found for ${capitalize(type1)} type Pokémon:</b>`
     }
     else{
+        let prevButton = document.querySelector("#previous-examples2");
+        let nextButton = document.querySelector("#next-examples2");
+        activateButtons(prevButton, nextButton, currentPageOffset2);
         document.querySelector("#examples-status2").innerHTML = 
-            `<b>${examplePokemon.length} results found for ${capitalize(type2)} type Pokémon:</b>`
+            `<b>${resultsNum} results found for ${capitalize(type2)} type Pokémon:</b>`
     }
-
-    if(type2 != ""){isType1 = !isType1;}
-
 }
 
 function getPokemonData(url){
@@ -86,10 +91,32 @@ function pokemonDataLoaded(e){
                         <p class="type">${type}</p>`;
     newDiv.style.border = "solid 1px black";
     newDiv.style.order = dexNumber;
-    if(!isType1Added){document.querySelector("#example-pokemon1").appendChild(newDiv);}
-    else{document.querySelector("#example-pokemon2").appendChild(newDiv);}
+
+    //add new div to proper list
+    let exampleList = null;
+    if(isType1){
+        exampleList = document.querySelector("#example-pokemon1");
+        exampleList.appendChild(newDiv);
+    }
+    else{
+        exampleList = document.querySelector("#example-pokemon2")
+        exampleList.appendChild(newDiv);
+    }
+
+    //change which list future divs should be added to
+    if(type2 != "" && exampleList.childElementCount == limit){isType1 = !isType1;}
 }
 
 function pokemonDataError(e){
     console.log("There was an error retrieving data for a Pokémon!")
+}
+
+function activateButtons(prevButton, nextButton, offset){
+    //previous button can turn off/on if a different page is being displayed
+    if(offset == 0){prevButton.disabled = true;}
+    else{prevButton.disabled = false;}
+
+    //next button can turn off/on if the user is on the last page
+    if(offset + limit >= resultsNum){nextButton.disabled = true;}
+    else{nextButton.disabled = false;}
 }

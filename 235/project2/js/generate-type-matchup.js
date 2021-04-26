@@ -9,23 +9,18 @@ let isType1Added = false;
 //PURPOSE:sets up api url when the generate button has been clicked
 //ARGUMENTS: --
 function generateButtonClicked(){
-    //console.log("Generate button clicked!")
     let url1 = POKEAPI_URL + "type/"    //url for type1
     let url2 = POKEAPI_URL + "type/"    //optional url for type2
 
     type1 = document.querySelector("#type1").value;
-    //console.log(`Type 1: ${type1} (button clicked)`);
-
     type2 = document.querySelector("#type2").value;
-    //console.log(`Type 1: ${type2} (button clicked)`);
 
     //clear lists before starting (remove past input)
     lists = document.querySelectorAll("ul");
     for(let i = 0; i < lists.length; i++){clearList(lists[i]);}
-    exampleList1 = document.querySelector("#example-pokemon1");
-    exampleList2 = document.querySelector("#example-pokemon2");
-    clearList(exampleList1);
-    clearList(exampleList2)
+    
+    clearList(document.querySelector("#example-pokemon1"));
+    clearList(document.querySelector("#example-pokemon2"))
 
     isType1Added = false;
 
@@ -43,8 +38,6 @@ function generateButtonClicked(){
 
         url1 += type1;
         url2 += type2;
-        //console.log(url1);
-        //console.log(url2);
 
         //retrieve data for both types
         getMatchupData(url1);
@@ -79,17 +72,12 @@ function getMatchupData(url){
 //ARGUMENT: XMLHttpRequest containing type matchup data
 function dataMatchupLoaded(e){
     let xhr = e.target;
-    //console.log(xhr.responseText);
-
     let obj = JSON.parse(xhr.responseText);
-
     let damageRelations = obj.damage_relations;
-    //console.log(damageRelations);   //2xdmg_from, 2xdmg_to, .5xdmg_from, .5xdmg_to, 0dmg_from, 0dmg_to
 
     //sort the damage relations so they match the page's layout:
     //2xdmg_to, .5xdmg_to, 0dmg_to, 2xdmg_from, .5dmg_from, 0dmg_from
     let reorderedArray = reorderArray(Object.entries(damageRelations));
-    //console.log(reorderedArray);
     
     //sort types into just names
     let types = [];
@@ -99,7 +87,6 @@ function dataMatchupLoaded(e){
             types[i].push(reorderedArray[i][j].name);
         }
     }
-    //console.log(types);
     
     for(let i = 0; i < lists.length; i++){
         addArrayToList(types[i], lists[i]);
@@ -240,7 +227,6 @@ function removeDuplicates(list){
             i--;
         }
     }
-    //console.log(sortedArray);
 }
 
 //PURPOSE: converts a list element into an array
@@ -259,10 +245,7 @@ function listToArray(list){
 //ARGUMENTS: --
 function dropDownSelectionChanged(){
     type1 = document.querySelector("#type1").value;
-    //console.log(`Type 1: ${type1} (selection changed)`);
-
     type2 = document.querySelector("#type2").value;
-    //console.log(`Type 2: ${type2} (selection changed)`);
 
     //re-enable all options in type 2 (don't want options to stay disabled!)
     let options = document.querySelectorAll("#type2 option")
