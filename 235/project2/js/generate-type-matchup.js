@@ -22,8 +22,10 @@ function generateButtonClicked(){
     //clear lists before starting (remove past input)
     lists = document.querySelectorAll("ul");
     for(let i = 0; i < lists.length; i++){clearList(lists[i]);}
-    exampleList = document.querySelector("#example-pokemon");
-    clearList(exampleList);
+    exampleList1 = document.querySelector("#example-pokemon1");
+    exampleList2 = document.querySelector("#example-pokemon2");
+    clearList(exampleList1);
+    clearList(exampleList2)
 
     isType1Added = false;
 

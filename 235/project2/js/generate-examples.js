@@ -1,6 +1,7 @@
 let limit = 0;
 let regionStartOffset = 0;
 let currentPageOffset = 0;
+let isType1 = true;
 
 function dataExampleLoaded(e){
     let xhr = e.target;
@@ -12,7 +13,7 @@ function dataExampleLoaded(e){
     limit = document.querySelector("#limit").value;
     regionStartOffset = document.querySelector("#region").value;
 
-    document.querySelector("#examples-status").innerHTML = `<b>Searching for ${capitalize(type1)} type Pokémon...</b>`;
+    document.querySelector("#examples-status1").innerHTML = `<b>Searching for ${capitalize(type1)} type Pokémon...</b>`;
 
     //examplePokemon has just pokemon name and url
     for(let i = currentPageOffset; i < currentPageOffset + limit; i++){
@@ -20,6 +21,11 @@ function dataExampleLoaded(e){
         getPokemonData(examplePokemon[i].pokemon.url);
         }
     }
+
+    document.querySelector("#examples-status1").innerHTML = `<b>${examplePokemon.length} results found for ${capitalize(type1)} type Pokémon:</b>`
+
+    if(type2 != ""){isType1 = !isType1;}
+
 }
 
 function getPokemonData(url){
@@ -55,11 +61,13 @@ function pokemonDataLoaded(e){
 
     //make div to show example
     let newDiv = document.createElement("div");
-    newDiv.innerHTML = `<p id="name">#${dexNumber} ${pokemonName}</p>
-                        <img src="${pokemonSprite}" alt="${pokemonName} Image">
-                        <p id="type">${type}</p>`;
+    newDiv.innerHTML = `<p id="${dexNumber}" class="name">#${dexNumber} ${pokemonName}</p>
+                        <img src="${pokemonSprite}" alt="${pokemonName} Image" class="image">
+                        <p class="type">${type}</p>`;
     newDiv.style.border = "solid 1px black";
-    document.querySelector("#example-pokemon").appendChild(newDiv);
+    newDiv.style.order = dexNumber;
+    if(!isType1Added){document.querySelector("#example-pokemon1").appendChild(newDiv);}
+    else{document.querySelector("#example-pokemon2").appendChild(newDiv);}
 }
 
 function pokemonDataError(e){
