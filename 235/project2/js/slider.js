@@ -6,6 +6,7 @@ window.addEventListener("load", (e)=>{document.querySelector("#limit-value").onc
 function sliderValueChanged(){
     let value = document.querySelector("#limit").value;
     document.querySelector("#limit-value").value = value;
+    document.querySelector("#limit-change").disabled = false;
 }
 
 //PURPOSE: change slider position when text changes
@@ -19,4 +20,5 @@ function textValueChanged(){
 
     textBox.value = value;
     document.querySelector("#limit").value = value;
+    document.querySelector("#limit-change").disabled = false;
 }

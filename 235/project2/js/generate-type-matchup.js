@@ -1,4 +1,5 @@
 window.addEventListener("load", (e) => {document.querySelector("#generate").onclick = generateButtonClicked});
+window.addEventListener("load", (e) => {document.querySelector("#limit-change").onclick = generateButtonClicked});
 window.addEventListener("load", (e) => {document.querySelector("#type1").onchange = dropDownSelectionChanged});
 
 let type1 = "";
@@ -18,16 +19,20 @@ function generateButtonClicked(){
     //clear lists before starting (remove past input)
     lists = document.querySelectorAll("ul");
     for(let i = 0; i < lists.length; i++){clearList(lists[i]);}
-    
+
     clearList(document.querySelector("#example-pokemon1"));
     clearList(document.querySelector("#example-pokemon2"))
 
     isType1Added = false;
+    generatePressed = true;
+    isType1 = true;
 
     //update status based on what types are selected
     //nothing is selected or only type 2 is selected
     if(type1 == ""){
         document.querySelector("#status").innerHTML = `<b>Type 1 has not been selected. Please select a type from type 1</b>`
+        document.querySelector("#examples-status1").innerHTML = "<b>Type 1 has not been selected yet</b>"
+        document.querySelector("#examples-status2").innerHTML = "<b>Type 1 and/or Type 2 has not been selected yet</b>"
         return;
     }
 
@@ -42,6 +47,8 @@ function generateButtonClicked(){
         //retrieve data for both types
         getMatchupData(url1);
         getMatchupData(url2);
+
+        document.querySelector("#limit-change").disabled = true;
     }
 
     //only type 1 has been selected
@@ -51,6 +58,9 @@ function generateButtonClicked(){
 
         url1 += type1
         getMatchupData(url1);
+
+        document.querySelector("#limit-change").disabled = true;
+        document.querySelector("#examples-status2").innerHTML = "<b>Type 2 has not been selected yet</b>"
     }
 
 }
@@ -62,7 +72,8 @@ function getMatchupData(url){
 
 	xhr.addEventListener("load", dataMatchupLoaded);
     xhr.addEventListener("load", dataExampleLoaded);
-	xhr.onerror = dataMatchupError;
+	xhr.addEventListener = ("error", dataMatchupError);
+	xhr.addEventListener = ("error", pokemonDataError);
 
 	xhr.open("GET", url);
 	xhr.send();
