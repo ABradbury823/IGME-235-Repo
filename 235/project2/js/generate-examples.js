@@ -9,8 +9,8 @@ let currentPageOffset2 = 0;     //offset from 0 of type2's example list
 let resultsNum1 = 0;            //# of Poké of type1
 let resultsNum2 = 0;            //# of Poké of type2
 let isType1 = true;             //is the current list type1's list?
-let examplePokemon1 = null;     //hold example Pokémon of type1 to save on requests
-let examplePokemon2 = null;     //hold example Pokémon of type2 to save on requests
+let examplePokemon1 = null;     //hold example Pokémon of type1
+let examplePokemon2 = null;     //hold example Pokémon of type2
 let generatePressed = true;     //was the generate button pressed?
 
 //PURPOSE: Prepare to move to the previous list of pokémon in the examples

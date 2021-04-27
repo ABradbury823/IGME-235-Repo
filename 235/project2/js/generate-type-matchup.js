@@ -24,7 +24,7 @@ function generateButtonClicked(){
     clearList(document.querySelector("#example-pokemon2"));
 
     isType1Added = false;
-    if(this.id == "generate"){generatePressed = true;}
+    if(this.id == "generate" || this.id == "limit-change"){generatePressed = true;}
     else{generatePressed = false;}
     isType1 = true;
 
@@ -77,9 +77,9 @@ function generateButtonClicked(){
 function getMatchupData(url){
     let xhr = new XMLHttpRequest();
 
-	xhr.addEventListener("load", dataMatchupLoaded);
+	if(generatePressed){xhr.addEventListener("load", dataMatchupLoaded);}
     xhr.addEventListener("load", dataExampleLoaded);
-	xhr.addEventListener = ("error", dataMatchupError);
+	if(generatePressed){xhr.addEventListener = ("error", dataMatchupError);}
 	xhr.addEventListener = ("error", pokemonDataError);
 
 	xhr.open("GET", url);
