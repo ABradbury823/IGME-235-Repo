@@ -21,10 +21,11 @@ function generateButtonClicked(){
     for(let i = 0; i < lists.length; i++){clearList(lists[i]);}
 
     clearList(document.querySelector("#example-pokemon1"));
-    clearList(document.querySelector("#example-pokemon2"))
+    clearList(document.querySelector("#example-pokemon2"));
 
     isType1Added = false;
-    generatePressed = true;
+    if(this.id == "generate"){generatePressed = true;}
+    else{generatePressed = false;}
     isType1 = true;
 
     //update status based on what types are selected

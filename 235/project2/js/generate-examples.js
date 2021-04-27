@@ -1,8 +1,9 @@
+window.addEventListener("load", (e) => {document.querySelector("#previous-examples1").onclick = prevPressed});
+window.addEventListener("load", (e) => {document.querySelector("#previous-examples2").onclick = prevPressed});
+window.addEventListener("load", (e) => {document.querySelector("#next-examples1").onclick = nextPressed});
+window.addEventListener("load", (e) => {document.querySelector("#next-examples2").onclick = nextPressed});
 
-
-
-let limit = 0;                  //# of example Pokémon that show up per page
-//let regionStartOffset = 0;    
+let limit = 0;                  //# of example Pokémon that show up per page   
 let currentPageOffset1 = 0;     //offset from 0 of type1's example list
 let currentPageOffset2 = 0;     //offset from 0 of type2's example list
 let resultsNum1 = 0;            //# of Poké of type1
@@ -11,6 +12,58 @@ let isType1 = true;             //is the current list type1's list?
 let examplePokemon1 = null;     //hold example Pokémon of type1 to save on requests
 let examplePokemon2 = null;     //hold example Pokémon of type2 to save on requests
 let generatePressed = true;     //was the generate button pressed?
+
+//PURPOSE: Prepare to move to the previous list of pokémon in the examples
+//ARGUMENTS: --
+function prevPressed(){
+    if(this.id == "previous-examples1"){
+        let url = POKEAPI_URL + "type/" + type1;
+
+        generatePressed = false;
+        currentPageOffset1 -= limit;
+        //prevent offset from going below 0
+        if(currentPageOffset1 < 0){currentPageOffset1 = 0;}
+
+        clearList(document.querySelector("#example-pokemon1"));
+        getMatchupData(url);
+    }
+    else{
+        let url = POKEAPI_URL + "type/" + type2;
+
+        generatePressed = false;
+        currentPageOffset2 -= limit;
+        if(currentPageOffset2 < 0){currentPageOffset2 = 0;}
+
+        clearList(document.querySelector("#example-pokemon2"));
+        getMatchupData(url);
+    }
+}
+
+//PURPOSE: Prepare to move to the next list of pokémon in the examples
+//ARGUMENTS; --
+function nextPressed(){
+    if(this.id == "next-examples1"){
+        let url = POKEAPI_URL + "type/" + type1;
+
+        generatePressed = false;
+        currentPageOffset1 += limit;
+        //prevent offset from going over number of pokémon
+        if(currentPageOffset1 >= examplePokemon1.length){currentPageOffset1 = examplePokemon1.length - 1;}
+
+        clearList(document.querySelector("#example-pokemon1"));
+        getMatchupData(url);
+    }
+    else{
+        let url = POKEAPI_URL + "type/" + type2;
+
+        generatePressed = false;
+        currentPageOffset2 += limit;
+        if(currentPageOffset2 >= examplePokemon2.length){currentPageOffset2 = examplePokemon2.length - 1;}
+
+        clearList(document.querySelector("#example-pokemon2"));
+        getMatchupData(url);
+    }
+}
 
 //PURPOSE: parse type data and prepare to retrieve Pokémon data
 //ARGUMENTS: XMLHttpRequest containing type data from api
@@ -34,7 +87,6 @@ function dataExampleLoaded(e){
 
     limit = document.querySelector("#limit").value;
     limit = parseInt(limit);
-    //regionStartOffset = document.querySelector("#region").value;
 
     //update to searching status and search for requested type pokémon
     if(isType1){
@@ -102,6 +154,7 @@ function pokemonDataLoaded(e){
     else{dexNumber = "???";}
 
     let pokemonSprite = obj.sprites.front_default;
+    if(!pokemonSprite){console.log("Could not retrieve sprite data");}
 
     //show both types (if applicable)
     let type = "";
