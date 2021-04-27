@@ -50,6 +50,10 @@ function generateButtonClicked(){
         getMatchupData(url2);
 
         document.querySelector("#limit-change").disabled = true;
+        document.querySelector("#previous-examples1").disabled = true;
+        document.querySelector("#previous-examples2").disabled = true;
+        document.querySelector("#next-examples1").disabled = true;
+        document.querySelector("#next-examples2").disabled = true;
     }
 
     //only type 1 has been selected
@@ -61,6 +65,8 @@ function generateButtonClicked(){
         getMatchupData(url1);
 
         document.querySelector("#limit-change").disabled = true;
+        document.querySelector("#previous-examples2").disabled = true;
+        document.querySelector("#next-examples2").disabled = true;
         document.querySelector("#examples-status2").innerHTML = "<b>Type 2 has not been selected yet</b>"
     }
 

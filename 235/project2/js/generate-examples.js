@@ -16,6 +16,8 @@ let generatePressed = true;     //was the generate button pressed?
 //PURPOSE: Prepare to move to the previous list of pokémon in the examples
 //ARGUMENTS: --
 function prevPressed(){
+    for(let i = 0; i < lists.length; i++){clearList(lists[i]);}
+
     if(this.id == "previous-examples1"){
         let url = POKEAPI_URL + "type/" + type1;
 
@@ -42,6 +44,8 @@ function prevPressed(){
 //PURPOSE: Prepare to move to the next list of pokémon in the examples
 //ARGUMENTS; --
 function nextPressed(){
+    for(let i = 0; i < lists.length; i++){clearList(lists[i]);}
+
     if(this.id == "next-examples1"){
         let url = POKEAPI_URL + "type/" + type1;
 
@@ -153,8 +157,9 @@ function pokemonDataLoaded(e){
     if(obj.id < 899){dexNumber = obj.id;}
     else{dexNumber = "???";}
 
-    let pokemonSprite = obj.sprites.front_default;
-    if(!pokemonSprite){console.log("Could not retrieve sprite data");}
+    let pokemonSprite ="";
+    if(!obj.sprites.front_default){console.log("Could not retrieve sprite data");}
+    else{pokemonSprite = obj.sprites.front_default;}
 
     //show both types (if applicable)
     let type = "";
