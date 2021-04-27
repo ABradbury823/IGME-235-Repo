@@ -26,7 +26,7 @@ function generateButtonClicked(){
     clearList(document.querySelector("#example-pokemon2"));
 
     isType1Added = false;
-    if(this.id == "generate" || this.id == "limit-change"){generatePressed = true;}
+    if(this.id == "generate"){generatePressed = true;}
     else{generatePressed = false;}
     isType1 = true;
 

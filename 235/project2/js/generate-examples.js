@@ -6,8 +6,8 @@ window.addEventListener("load", (e) => {document.querySelector("#next-examples2"
 let limit = 0;                  //# of example Pokémon that show up per page   
 let currentPageOffset1 = 0;     //offset from 0 of type1's example list
 let currentPageOffset2 = 0;     //offset from 0 of type2's example list
-let resultsNum1 = 0;            //# of Poké of type1
-let resultsNum2 = 0;            //# of Poké of type2
+let resultsNum1 = 0;            //# of Pokémon of type1
+let resultsNum2 = 0;            //# of Pokémon of type2
 let isType1 = true;             //is the current list type1's list?
 let examplePokemon1 = null;     //hold example Pokémon of type1
 let examplePokemon2 = null;     //hold example Pokémon of type2
@@ -191,8 +191,10 @@ function pokemonDataLoaded(e){
         exampleList.appendChild(newDiv);
     }
     else{
-        exampleList = document.querySelector("#example-pokemon2")
-        exampleList.appendChild(newDiv);
+        if(document.querySelector("#example-pokemon2").childElementCount < limit){
+            exampleList = document.querySelector("#example-pokemon2")
+            exampleList.appendChild(newDiv);
+        }
     }
 }
 

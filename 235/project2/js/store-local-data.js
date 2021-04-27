@@ -31,17 +31,17 @@ function retrieveLocalData(){
     if(storedType2){type2Field.querySelector(`option[value=${storedType2}]`).selected = true;}
     
     //are there stored filters for example Pokémon?
-    if(storedResults){resultsSlider.value = storedResults; resultsText.value = storedResults;}
-    if(storedType1Offset){currentPageOffset1 = storedType1Offset;}
-    if(storedType2Offset){currentPageOffset2 = storedType2Offset;}
+    if(storedResults){resultsSlider.value = storedResults; resultsText.value = storedResults}
+    if(storedType1Offset){currentPageOffset1 = parseInt(storedType1Offset);}
+    if(storedType2Offset){currentPageOffset2 = parseInt(storedType2Offset);}
 
-
-    if(storedType1 || storedType2){generateButtonClicked(); dropDownSelectionChanged();}
+    generateButtonClicked(); 
+    dropDownSelectionChanged();
 
     //set data when field is changed
     type1Field.addEventListener("change", e=> {localStorage.setItem(type1Key, e.target.value);});
     type2Field.addEventListener("change", e=> {localStorage.setItem(type2Key, e.target.value);});
-    changeResultsButton.addEventListener("click", e=>{localStorage.setItem(resultsKey, resultsText.value);});
+    changeResultsButton.addEventListener("click", e=>{localStorage.setItem(resultsKey, resultsText.value); isFirstLoad = true;});
 
     //save offset when next/previous are clicked
     nextButton1.addEventListener("click", e=>{localStorage.setItem(type1OffsetKey, currentPageOffset1);});
