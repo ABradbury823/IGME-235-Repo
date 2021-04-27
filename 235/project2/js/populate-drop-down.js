@@ -1,6 +1,6 @@
 window.addEventListener("load", generateTypesURL);
 
-const POKEAPI_URL = "https://pokeapi.co/api/v2/";
+const POKEAPI_URL = "https://pokeapi.co/api/v2/";   //API base link
 
 //PURPOSE: generate url for api to retrieve types
 //ARGUMENTS: --

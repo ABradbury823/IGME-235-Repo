@@ -2,10 +2,10 @@ window.addEventListener("load", (e) => {document.querySelector("#generate").oncl
 window.addEventListener("load", (e) => {document.querySelector("#limit-change").onclick = generateButtonClicked});
 window.addEventListener("load", (e) => {document.querySelector("#type1").onchange = dropDownSelectionChanged});
 
-let type1 = "";
-let type2 = "";
-let lists = null;
-let isType1Added = false;
+let type1 = "";             //type selected from Type 1 dropdown
+let type2 = "";             //type selected from Type 2 dropdown
+let lists = null;           //all unordered list elements on the page
+let isType1Added = false;   //has type1 been added to the list already?
 
 //PURPOSE:sets up api url when the generate button has been clicked
 //ARGUMENTS: --
