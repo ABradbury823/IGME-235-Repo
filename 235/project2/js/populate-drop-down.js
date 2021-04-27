@@ -1,7 +1,5 @@
 window.addEventListener("load", generateTypesURL);
 
-const POKEAPI_URL = "https://pokeapi.co/api/v2/";   //API base link
-
 //PURPOSE: generate url for api to retrieve types
 //ARGUMENTS: --
 function generateTypesURL(){
@@ -51,18 +49,4 @@ function populateDropDown(e){
 //ARGUMENTS: XMLHttpRequest that caused the error
 function dataTypeError(e){
     console.log("There was an error loading the types!")
-}
-
-//PURPOSE: capitalizes the first letter of a given string
-//ARGUMENTS: the string to be capitalized
-//RETURNS: a string with the first letter capitalized (returns empty string if the argument was an empty string)
-function capitalize(string){
-    //can't capitalize an empty string!
-    if(string.length == 0) return string;
-
-    //slice up string and send back a new string with capital first letter
-    let firstLetter = string.slice(0, 1);
-    let remainingString = string.slice(1, string.length);
-    let newString = firstLetter.toUpperCase() + remainingString;
-    return newString;
 }

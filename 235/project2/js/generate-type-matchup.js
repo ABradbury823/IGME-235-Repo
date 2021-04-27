@@ -2,10 +2,12 @@ window.addEventListener("load", (e) => {document.querySelector("#generate").oncl
 window.addEventListener("load", (e) => {document.querySelector("#limit-change").onclick = generateButtonClicked});
 window.addEventListener("load", (e) => {document.querySelector("#type1").onchange = dropDownSelectionChanged});
 
-let type1 = "";             //type selected from Type 1 dropdown
-let type2 = "";             //type selected from Type 2 dropdown
-let lists = null;           //all unordered list elements on the page
-let isType1Added = false;   //has type1 been added to the list already?
+let type1 = "";                                     //type selected from Type 1 dropdown
+let type2 = "";                                     //type selected from Type 2 dropdown
+let lists = null;                                   //all unordered list elements on the page
+let isType1Added = false;                           //has type1 been added to the list already?
+const POKEAPI_URL = "https://pokeapi.co/api/v2/";   //API base link
+let isFirstLoad = true;
 
 //PURPOSE:sets up api url when the generate button has been clicked
 //ARGUMENTS: --
@@ -78,9 +80,9 @@ function generateButtonClicked(){
 function getMatchupData(url){
     let xhr = new XMLHttpRequest();
 
-	if(generatePressed){xhr.addEventListener("load", dataMatchupLoaded);}
+	if(generatePressed || isFirstLoad){xhr.addEventListener("load", dataMatchupLoaded);}
     xhr.addEventListener("load", dataExampleLoaded);
-	if(generatePressed){xhr.addEventListener = ("error", dataMatchupError);}
+	if(generatePressed || isFirstLoad){xhr.addEventListener = ("error", dataMatchupError);}
 	xhr.addEventListener = ("error", pokemonDataError);
 
 	xhr.open("GET", url);
@@ -275,4 +277,18 @@ function dropDownSelectionChanged(){
 
     //disable option in type 2 if it has already been selected in type 1
     if(type1 != ""){document.querySelector(`#type2 [value=${type1}]`).disabled = true;}
+}
+
+//PURPOSE: capitalizes the first letter of a given string
+//ARGUMENTS: the string to be capitalized
+//RETURNS: a string with the first letter capitalized (returns empty string if the argument was an empty string)
+function capitalize(string){
+    //can't capitalize an empty string!
+    if(string.length == 0) return string;
+
+    //slice up string and send back a new string with capital first letter
+    let firstLetter = string.slice(0, 1);
+    let remainingString = string.slice(1, string.length);
+    let newString = firstLetter.toUpperCase() + remainingString;
+    return newString;
 }

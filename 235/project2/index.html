@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokémon Type Matchups</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/populate-drop-down.js"></script>
+    <!-- <script src="js/populate-drop-down.js"></script> -->
     <script src="js/generate-type-matchup.js"></script>
     <script src="js/generate-examples.js"></script>
     <script src="js/slider.js"></script>
+    <script src ="js/store-local-data.js"></script>
 </head>
 <body>
     <h1>Pokémon Matchups</h1>
@@ -19,11 +20,45 @@
 
         <select name="type1" id="type1">
             <option value="">Type 1</option>
-            <!--Fill this in with JavaScript-->
+            <option value="normal">Normal</option>
+            <option value="fighting">Fighting</option>
+            <option value="flying">Flying</option>
+            <option value="poison">Poison</option>
+            <option value="ground">Ground</option>
+            <option value="rock">Rock</option>
+            <option value="bug">Bug</option>
+            <option value="ghost">Ghost</option>
+            <option value="steel">Steel</option>
+            <option value="fire">Fire</option>
+            <option value="water">Water</option>
+            <option value="grass">Grass</option>
+            <option value="electric">Electric</option>
+            <option value="psychic">Psychic</option>
+            <option value="ice">Ice</option>
+            <option value="dragon">Dragon</option>
+            <option value="dark">Dark</option>
+            <option value="fairy">Fairy</option>
         </select>
         <select name="type2" id="type2">
             <option value="">Type 2 (optional)</option>
-            <!--Fill this in with JavaScript-->
+            <option value="normal">Normal</option>
+            <option value="fighting">Fighting</option>
+            <option value="flying">Flying</option>
+            <option value="poison">Poison</option>
+            <option value="ground">Ground</option>
+            <option value="rock">Rock</option>
+            <option value="bug">Bug</option>
+            <option value="ghost">Ghost</option>
+            <option value="steel">Steel</option>
+            <option value="fire">Fire</option>
+            <option value="water">Water</option>
+            <option value="grass">Grass</option>
+            <option value="electric">Electric</option>
+            <option value="psychic">Psychic</option>
+            <option value="ice">Ice</option>
+            <option value="dragon">Dragon</option>
+            <option value="dark">Dark</option>
+            <option value="fairy">Fairy</option>
         </select>
         <button type="button" id="generate">Generate Type Matchup</button>
     </div>
