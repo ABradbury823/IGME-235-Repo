@@ -35,6 +35,7 @@ function generateButtonClicked(){
         document.querySelector("#examples-status1").innerHTML = "<b>Type 1 has not been selected yet</b>"
         document.querySelector("#examples-status2").innerHTML = "<b>Type 1 and/or Type 2 has not been selected yet</b>"
 
+        //disable buttons if there won't be any example pokémon
         document.querySelector("#limit-change").disabled = true;
         document.querySelector("#previous-examples1").disabled = true;
         document.querySelector("#previous-examples2").disabled = true;
