@@ -34,6 +34,12 @@ function generateButtonClicked(){
         document.querySelector("#status").innerHTML = `<b>Type 1 has not been selected. Please select a type from type 1</b>`
         document.querySelector("#examples-status1").innerHTML = "<b>Type 1 has not been selected yet</b>"
         document.querySelector("#examples-status2").innerHTML = "<b>Type 1 and/or Type 2 has not been selected yet</b>"
+
+        document.querySelector("#limit-change").disabled = true;
+        document.querySelector("#previous-examples1").disabled = true;
+        document.querySelector("#previous-examples2").disabled = true;
+        document.querySelector("#next-examples1").disabled = true;
+        document.querySelector("#next-examples2").disabled = true;
         return;
     }
 
@@ -48,12 +54,6 @@ function generateButtonClicked(){
         //retrieve data for both types
         getMatchupData(url1);
         getMatchupData(url2);
-
-        document.querySelector("#limit-change").disabled = true;
-        document.querySelector("#previous-examples1").disabled = true;
-        document.querySelector("#previous-examples2").disabled = true;
-        document.querySelector("#next-examples1").disabled = true;
-        document.querySelector("#next-examples2").disabled = true;
     }
 
     //only type 1 has been selected
