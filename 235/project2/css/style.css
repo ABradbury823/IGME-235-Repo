@@ -33,6 +33,7 @@ h1{
 
 h2{text-align: center;}
 
+/*div containing type selection label, dropdowns and generate button*/
 #type-selection{
     display: flex;
     flex-wrap: wrap;
@@ -46,6 +47,7 @@ label.selection{font-style: italic;}
 
 #generate{align-self: center;}
 
+/*Divs containing all offensive/defensive damage relationships*/
 #attacking, #defending{
     display: flex;
     flex-direction: row;
@@ -60,6 +62,7 @@ label.selection{font-style: italic;}
     font-style: italic;
 }
 
+/*Divs holding damage relationship label and list*/
 .damage-container{
     display: flex;
     flex-direction: column;
@@ -68,6 +71,7 @@ label.selection{font-style: italic;}
     padding: 0 5%;
 }
 
+/*List of damage relationships*/
 .damage-relations{
     list-style-type: none;
     display: flex;
@@ -81,6 +85,7 @@ label.selection{font-style: italic;}
     max-height: 165px;
 }
 
+/*Each type under a damage relationship*/
 .type{
     padding: 0 1rem;
     margin: 0 .25rem .5rem .25rem;
@@ -89,24 +94,29 @@ label.selection{font-style: italic;}
     align-self: center;
 }
 
+/*Results number slider*/
 #limit{
     position: relative;
     top: 5px;
 }
 
+/*Results number textbox*/
 #limit-value{width: 50px;}
 
+/*Div containing both example Pokémon lists*/
 #example-results{
     display: flex;
     flex-direction: column;
 }
 
+/*Example lists for type 1 and type 2*/
 #example-pokemon1, #example-pokemon2{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
 
+/*Each example Pokémon*/
 .example{
     display: flex;
     flex-direction: column;
@@ -114,6 +124,7 @@ label.selection{font-style: italic;}
     width: 200px;
 }
 
+/*Elements inside each example Pokémon div*/
 .name, .image, .typing{
     align-self: center;
     padding: .5rem;
@@ -126,6 +137,7 @@ label.selection{font-style: italic;}
     margin: 0 .5rem;
 }
 
+/*Both next and previous button for each example list*/
 .example-buttons{align-self: center;}
 
 footer{
