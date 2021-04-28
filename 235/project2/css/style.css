@@ -1,35 +1,47 @@
 html{
-    margin: 0 6%;
-    background-color: rgb(11, 43, 15);
+    margin: 0 10%;
+    background-color: rgb(65, 13, 13);
     color: white;
     font-size: 1.25rem;
+    font-family: 'Vollkorn', serif;
+}
+
+button, select, option, input{
+    font-family: 'Vollkorn', serif; 
+    font-size: .75rem; 
+    padding: .25rem .5rem;
+    border-radius: 10px;
 }
 
 body{
     background-color: rgb(32, 32, 32);
     padding: 0;
     margin: 0;
+    border: solid 1px grey;
 }
 
 main{padding:1rem;}
 
+label{font-family: 'Open Sans', sans-serif;}
+
 h1{
     margin: 0 1rem;
     text-align: center;
-    border-bottom: solid 1px white;
+    border-bottom: solid 1px grey;
 }
 
 h2{text-align: center;}
 
 #type-selection{
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     margin-top: 1rem;
 }
 
 label{font-size: 1.1rem;}
 
-.selection{margin: 1rem;}
+.selection{margin: .5rem;}
 
 #generate{align-self: center;}
 
@@ -50,14 +62,23 @@ label{font-size: 1.1rem;}
     display: flex;
     flex-direction: row;
     justify-content: center;
+    flex-wrap: wrap;
     padding-left: 0;
     margin-top: 0;
     margin-bottom: 2rem;
-    border-bottom: dotted 1px white;
+    border-bottom: dotted 1px grey;
 }
 
 .type{
     padding: 0 1rem;
+    margin: 0 .25rem .5rem .25rem;
+    border-radius: 10px;
+    border: dotted 1px grey;
+}
+
+#limit{
+    position: relative;
+    top: 5px;
 }
 
 #example-results{
@@ -68,11 +89,14 @@ label{font-size: 1.1rem;}
 #example-pokemon1, #example-pokemon2{
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .example{
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
+    width: 200px;
 }
 
 .name, .image, .typing{
@@ -80,10 +104,26 @@ label{font-size: 1.1rem;}
     padding: .5rem;
 }
 
+.image{
+    background-color: rgb(54, 54, 54);
+    border-radius: 25px;
+    padding: .25rem .5rem;
+    margin: 0 .5rem;
+}
+
 .example-buttons{align-self: center;}
 
 footer{
     padding: .5rem 1rem;
-    border-top: solid 1px white;
+    border-top: dotted 1px grey;
     margin-top: 0;
+    margin-bottom: .5rem;
 }
+
+a{border: solid 1px grey; padding: .25rem;}
+
+a:link{color: white; text-decoration: none;}
+a:visited{color: white; text-decoration: none;}
+a:focus{text-decoration: underline; font-size: 110%;}
+a:hover{text-decoration: underline; font-size: 110%;}
+a:active{color:grey; text-decoration: underline; font-size: 110%;}
