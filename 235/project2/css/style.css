@@ -17,12 +17,13 @@ body{
     background-color: rgb(32, 32, 32);
     padding: 0;
     margin: 0;
-    border: solid 1px grey;
+    border-left: solid 1px grey;
+    border-right: solid 1px grey;
 }
 
 main{padding:1rem;}
 
-label{font-family: 'Open Sans', sans-serif;}
+label{font-family: 'Open Sans', sans-serif; font-size: 1.1rem;}
 
 h1{
     margin: 0 1rem;
@@ -39,7 +40,7 @@ h2{text-align: center;}
     margin-top: 1rem;
 }
 
-label{font-size: 1.1rem;}
+label.selection{font-style: italic;}
 
 .selection{margin: .5rem;}
 
@@ -47,7 +48,9 @@ label{font-size: 1.1rem;}
 
 #attacking, #defending{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 #attacking label, #defending label{
@@ -57,16 +60,25 @@ label{font-size: 1.1rem;}
     font-style: italic;
 }
 
+.damage-container{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    padding: 0 5%;
+}
+
 .damage-relations{
     list-style-type: none;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
+    align-content: center;
     flex-wrap: wrap;
     padding-left: 0;
     margin-top: 0;
     margin-bottom: 2rem;
-    border-bottom: dotted 1px grey;
+    max-height: 165px;
 }
 
 .type{
@@ -74,12 +86,15 @@ label{font-size: 1.1rem;}
     margin: 0 .25rem .5rem .25rem;
     border-radius: 10px;
     border: dotted 1px grey;
+    align-self: center;
 }
 
 #limit{
     position: relative;
     top: 5px;
 }
+
+#limit-value{width: 50px;}
 
 #example-results{
     display: flex;
@@ -117,7 +132,6 @@ footer{
     padding: .5rem 1rem;
     border-top: dotted 1px grey;
     margin-top: 0;
-    margin-bottom: .5rem;
 }
 
 a{border: solid 1px grey; padding: .25rem;}

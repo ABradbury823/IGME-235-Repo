@@ -66,28 +66,40 @@
 
     <p id="status"><b>Type has not been selected yet</b></p>
 
+    <h2>When Attacking:</h2>
     <div id="attacking">
-        <h2>When Attacking:</h2>
-        <label>Super Effective Against:</label>
-        <ul id="strong" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        <div class="damage-container">
+            <label>Super Effective Against:</label>
+            <ul id="strong" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        </div>
 
-        <label>Not Very Effective Against:</label>
-        <ul id="weak" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        <div class="damage-container">
+            <label>Not Very Effective Against:</label>
+            <ul id="weak" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        </div>
 
-        <label>No Effect Against:</label>
-        <ul id="cannot-affect" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        <div class="damage-container">
+            <label>No Effect Against:</label>
+            <ul id="cannot-affect" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        </div>
     </div>
 
+    <h2>When Defending:</h2>
     <div id="defending">
-        <h2>When Defending:</h2>
-        <label>Super Effective From:</label>
-        <ul id="vulnerable" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        <div class="damage-container">
+            <label>Super Effective From:</label>
+            <ul id="vulnerable" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        </div>
 
-        <label>Not Very Effective From:</label>
-        <ul id="resistant" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        <div class="damage-container">
+            <label>Not Very Effective From:</label>
+            <ul id="resistant" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        </div>
 
-        <label>No Effect From:</label>
-        <ul id="immune-to" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        <div class="damage-container">
+            <label>No Effect From:</label>
+            <ul id="immune-to" class="damage-relations"><!--Fill this in with JavaScript--></ul>
+        </div>
     </div>
 
     <div id="examples">
@@ -125,6 +137,7 @@
         <p>&copy;Andrew Bradbury 2021</p>
         <p>I do not own the rights to the Pokémon shown here</p>
         <p>All rights go their respective owners</p>
+        <p>Data provided by PokéAPI at <a href="https://pokeapi.co/">https://pokeapi.co</a></p>
         <a href="">Link to Documentation</a>
     </footer>
 </body>
