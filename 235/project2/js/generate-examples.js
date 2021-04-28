@@ -180,9 +180,10 @@ function pokemonDataLoaded(e){
     let newDiv = document.createElement("div");
     newDiv.innerHTML = `<p id="${dexNumber}" class="name">#${dexNumber} ${pokemonName}</p>
                         <img src="${pokemonSprite}" alt="${pokemonName} Image" class="image">
-                        <p class="type">${type}</p>`;
-    newDiv.style.border = "solid 1px black";
+                        <p class="typing">${type}</p>`;
+    //newDiv.style.border = "solid 1px black";
     newDiv.style.order = dexNumber;
+    newDiv.className = "example";
 
     //add new div to proper list, make sure list 1 isn't full just in case of overlapping types (ex: normal-flying)
     let exampleList = null;

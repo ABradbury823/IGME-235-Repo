@@ -18,17 +18,21 @@ function generateButtonClicked(){
     type1 = document.querySelector("#type1").value;
     type2 = document.querySelector("#type2").value;
 
-    //clear lists before starting (remove past input)
-    lists = document.querySelectorAll("ul");
-    for(let i = 0; i < lists.length; i++){clearList(lists[i]);}
-
-    clearList(document.querySelector("#example-pokemon1"));
-    clearList(document.querySelector("#example-pokemon2"));
-
     isType1Added = false;
     if(this.id == "generate"){generatePressed = true;}
     else{generatePressed = false;}
     isType1 = true;
+
+    //clear lists before starting (remove past input)
+    lists = document.querySelectorAll("ul");
+    if(generatePressed || isFirstLoad){
+        for(let i = 0; i < lists.length; i++){
+            clearList(lists[i]);
+        }
+    }
+
+    clearList(document.querySelector("#example-pokemon1"));
+    clearList(document.querySelector("#example-pokemon2"));
 
     //update status based on what types are selected
     //nothing is selected or only type 2 is selected
@@ -57,6 +61,8 @@ function generateButtonClicked(){
         //retrieve data for both types
         getMatchupData(url1);
         getMatchupData(url2);
+
+        document.querySelector("#limit-change").disabled = true;
     }
 
     //only type 1 has been selected
@@ -224,6 +230,7 @@ function addArrayToList(array, list){
         let type = array[i];
         let newLi = document.createElement("li");
         newLi.innerText = capitalize(type);
+        newLi.className = "type";
         list.appendChild(newLi);
     }
 

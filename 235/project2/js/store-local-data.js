@@ -35,8 +35,10 @@ function retrieveLocalData(){
     if(storedType1Offset){currentPageOffset1 = parseInt(storedType1Offset);}
     if(storedType2Offset){currentPageOffset2 = parseInt(storedType2Offset);}
 
-    generateButtonClicked(); 
-    dropDownSelectionChanged();
+    if(storedType1 || storedType2){
+        generateButtonClicked(); 
+        dropDownSelectionChanged();
+    }
 
     //set data when field is changed
     type1Field.addEventListener("change", e=> {localStorage.setItem(type1Key, e.target.value);});

@@ -1,20 +1,89 @@
+html{
+    margin: 0 6%;
+    background-color: rgb(11, 43, 15);
+    color: white;
+    font-size: 1.25rem;
+}
 
+body{
+    background-color: rgb(32, 32, 32);
+    padding: 0;
+    margin: 0;
+}
 
+main{padding:1rem;}
 
+h1{
+    margin: 0 1rem;
+    text-align: center;
+    border-bottom: solid 1px white;
+}
 
+h2{text-align: center;}
 
+#type-selection{
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
 
+label{font-size: 1.1rem;}
 
+.selection{margin: 1rem;}
 
+#generate{align-self: center;}
 
+#attacking, #defending{
+    display: flex;
+    flex-direction: column;
+}
 
+#attacking label, #defending label{
+    display: block;
+    text-align: center;
+    padding: .5rem 0;
+    font-style: italic;
+}
 
+.damage-relations{
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    border-bottom: dotted 1px white;
+}
 
+.type{
+    padding: 0 1rem;
+}
 
-
-
-
+#example-results{
+    display: flex;
+    flex-direction: column;
+}
 
 #example-pokemon1, #example-pokemon2{
     display: flex;
+    justify-content: center;
+}
+
+.example{
+    display: flex;
+    flex-direction: column;
+}
+
+.name, .image, .typing{
+    align-self: center;
+    padding: .5rem;
+}
+
+.example-buttons{align-self: center;}
+
+footer{
+    padding: .5rem 1rem;
+    border-top: solid 1px white;
+    margin-top: 0;
 }
