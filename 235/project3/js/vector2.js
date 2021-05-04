@@ -101,14 +101,14 @@ class Vector2{
         return v.copy().normalize();
     }
 
-    //Returns a unit vector representing UP (0, 1)
+    //Returns a unit vector representing UP (0, -1)
     static up(){
-        return new Vector2(0, 1);
+        return new Vector2(0, -1);
     }
 
-    //Returns a unit vector representing DOWN (0, -1)
+    //Returns a unit vector representing DOWN (0, 1)
     static down(){
-        return new Vector2(0, -1);
+        return new Vector2(0, 1);
     }
 
     //Returns a unit vector representing RIGHT (1, 0)

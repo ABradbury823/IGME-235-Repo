@@ -20,9 +20,10 @@ let stage;
 
 // game variables
 let startScene;
-let gameScene, levelText, goldText;
+let gameScene, levelText, goldText, track;
 let gameOverScene;
 
+let trackNodes = [];
 let levelNum = 1;
 let gold = 0;
 let paused = true;
@@ -46,7 +47,21 @@ function setup() {
 	// #4 - Create labels for all 3 scenes
 	createButtonsAndLabels();
 
-	// #5 - Create ship
+	// #5 - Create track
+	trackNodes = [
+				new TrackNode(600, HEIGHT),		//starting node
+				new TrackNode(600, 500, -1, 0),
+				new TrackNode(100, 500, 0, -1),
+				new TrackNode(100, 400, 1, 0),
+				new TrackNode(700, 400, 0, -1),
+				new TrackNode(700, 300, -1, 0),
+				new TrackNode(200, 300, 0, -1),
+				new TrackNode(200, 0)			//ending node
+	];
+
+
+	track = new Track(trackNodes, 25);
+	track.draw();
 	
 	// #6 - Load Sounds
 	
@@ -157,7 +172,8 @@ function startGame(){
 	gameOverScene.visible = false;
 	gameScene.visible = true;
 
-	//more when levels, player and enemies are built
+	//more when levels, player, and enemies are built
+	
 }
 
 //PURPOSE: End game and empty out game scene
