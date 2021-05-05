@@ -24,6 +24,7 @@ let gameScene, levelText, goldText, track;
 let gameOverScene;
 
 let trackNodes = [];
+let troops = [];
 let levelNum = 1;
 let gold = 0;
 let paused = true;
@@ -49,19 +50,24 @@ function setup() {
 
 	// #5 - Create track
 	trackNodes = [
-				new TrackNode(600, HEIGHT),		//starting node
+				new TrackNode(600, HEIGHT + 10),		//starting node
 				new TrackNode(600, 500, -1, 0),
 				new TrackNode(100, 500, 0, -1),
 				new TrackNode(100, 400, 1, 0),
 				new TrackNode(700, 400, 0, -1),
 				new TrackNode(700, 300, -1, 0),
 				new TrackNode(200, 300, 0, -1),
-				new TrackNode(200, 0)			//ending node
+				new TrackNode(200, -10)					//ending node
 	];
 
+	for(let i = 0; i < trackNodes.length; i++){gameScene.addChild(trackNodes[i]);}
 
-	track = new Track(trackNodes, 25);
+	track = new Track(trackNodes, 50);
 	track.draw();
+
+	let troop = new Troop(trackNodes[0].x, trackNodes[0].y, 2);
+	troops.push(troop);
+	gameScene.addChild(troops[0]);
 	
 	// #6 - Load Sounds
 	
@@ -173,7 +179,7 @@ function startGame(){
 	gameScene.visible = true;
 
 	//more when levels, player, and enemies are built
-	
+	app.ticker.add(update);
 }
 
 //PURPOSE: End game and empty out game scene
@@ -198,4 +204,8 @@ function changeLevelTo(level){
 function changeGoldAmount(rate){
 	gold += rate;
 	goldText.text = `Gold: ${gold}`;
+}
+
+function update(){
+	troops[0].move();
 }

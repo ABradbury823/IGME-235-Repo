@@ -1,37 +1,32 @@
-//Track Node class that represents a point on the track(corner) that each troop seeks in order
+//PURPOSE: Track Node class that represents a corner on the track
+//CONSTRUCTOR: X position of the node, Y position of the node, X coordinate of direction vector, Y coordinate of direction vector
 class TrackNode extends PIXI.Graphics{
     constructor(posX, posY, dirX = 0, dirY = -1){
         super();
-        this.position = new Vector2(posX, posY);
+        this.size = 5;
+        this.position = new Vector2(posX - this.size / 2, posY - this.size / 2);
         this.direction = new Vector2(dirX, dirY).normalize();
 
-        //debugging
         this.beginFill(0xFFFFFF);
-        this.drawCircle(0, 0, 2);
+        this.drawRect(0, 0, this.size, this.size);
         this.endFill();
     }
 
     draw(){
         this.x = this.position.x;
         this.y = this.position.y;
+        this.width = size;
+        this.height = size;
     }
 }
 
-//Track class that holds a list of Track Nodes, milestones/checkpoints, and represents drawn track
+//PURPOSE: Track class that holds a list of Track Nodes, milestones/checkpoints, and represents drawn track
+//CONSTRUCTOR: An array of TrackNodes, The half-width of the track (pixels)
 class Track{
     constructor(nodes, halfWidth = 10){
         this.nodes = nodes;
         this.halfWidth = halfWidth;
         this.trackLines = [];
-
-        for(let i = 0; i < nodes.length; i++){
-            nodes[i].draw();
-            gameScene.addChild(nodes[i]);
-        }
-    }
-
-    addNode(node){
-        this.nodes.push(node);
     }
 
     draw(){
@@ -50,6 +45,60 @@ class Track{
 
 
 //Troop class that represents one of the player's troops
+class Troop extends PIXI.Graphics{
+    constructor(x, y, speed){
+        super();
+        this.size = 20;
+        this.position = new Vector2(x - this.size / 2, y - this.size / 2);
+        this.speed = speed;
+        this.target = trackNodes[1];
+        this.direction = trackNodes[0].direction;
+        this.targetIndex = 1;
+        this.realign = false;
+        this.realignPos = new Vector2();
+
+        this.beginFill(0xFFFF00);
+        this.drawRect(0, 0, this.size, this.size);
+        this.endFill();
+    }
+
+    move(){
+        if(isColliding(this, this.target) && this.targetIndex < trackNodes.length - 1){
+            //console.log("collision");
+            this.realign = true;
+            let dist = Vector2.distance(this.position, this.target.position);
+            this.realignPos = Vector2.add(this.position, Vector2.multiply(this.direction, dist));
+            this.position = Vector2.add(this.position, Vector2.multiply(this.direction, 4  + this.size / 2));
+            this.direction = this.target.direction;
+            this.targetIndex++;
+            this.target = trackNodes[this.targetIndex];
+        }
+
+        else if(isColliding(this, this.target) && this.targetIndex == trackNodes.length - 1){
+            this.position = trackNodes[0].position;
+            this.direction = this.target.direction;
+            this.targetIndex = 0;
+            this.target = trackNodes[this.targetIndex];
+        }
+
+        /*if(this.realign){
+            this.position = new Vector2(lerp(this.position.x, this.realignPos.x, .1), lerp(this.position.y, this.realignPos.y, .1));
+
+            let xDiff = Math.abs(this.position.x - this.realignPos.x);
+            let yDiff = Math.abs(this.position.y - this.realignPos.y);
+            let dist = Math.abs(Vector2.distance(this.position, this.realignPos));
+            if(xDiff < .01 && dist > this.size / 2 )
+                this.realign = false;
+            else if(yDiff < .01 && dist > this.size / 2)
+                this.realign = false;
+        }*/
+
+        let velocity = Vector2.multiply(this.direction, this.speed);
+        this.position = Vector2.add(this.position, velocity);
+        this.x = this.position.x;
+        this.y = this.position.y;
+    }
+}
 
 
 //Enemy class that shoots at the player's troops
