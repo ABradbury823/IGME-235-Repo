@@ -31,6 +31,7 @@ let paused = true;
 
 function setup() {
 	stage = app.stage;
+	app.renderer.backgroundColor = 0xe4e88e;
 	// #1 - Create the `start` scene
 	startScene = new PIXI.Container();
 	stage.addChild(startScene);

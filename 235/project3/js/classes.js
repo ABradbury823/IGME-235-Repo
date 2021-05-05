@@ -66,32 +66,31 @@ class Troop extends PIXI.Graphics{
         if(isColliding(this, this.target) && this.targetIndex < trackNodes.length - 1){
             //console.log("collision");
             this.realign = true;
-            let dist = Vector2.distance(this.position, this.target.position);
+            let dist = this.target.size + this.size / 2
             this.realignPos = Vector2.add(this.position, Vector2.multiply(this.direction, dist));
-            this.position = Vector2.add(this.position, Vector2.multiply(this.direction, 4  + this.size / 2));
             this.direction = this.target.direction;
             this.targetIndex++;
             this.target = trackNodes[this.targetIndex];
         }
 
         else if(isColliding(this, this.target) && this.targetIndex == trackNodes.length - 1){
-            this.position = trackNodes[0].position;
+            this.position = new Vector2(trackNodes[0].x - this.size / 2, trackNodes[0].y - this.size / 2);
             this.direction = this.target.direction;
             this.targetIndex = 0;
             this.target = trackNodes[this.targetIndex];
         }
 
-        /*if(this.realign){
-            this.position = new Vector2(lerp(this.position.x, this.realignPos.x, .1), lerp(this.position.y, this.realignPos.y, .1));
-
-            let xDiff = Math.abs(this.position.x - this.realignPos.x);
-            let yDiff = Math.abs(this.position.y - this.realignPos.y);
-            let dist = Math.abs(Vector2.distance(this.position, this.realignPos));
-            if(xDiff < .01 && dist > this.size / 2 )
-                this.realign = false;
-            else if(yDiff < .01 && dist > this.size / 2)
-                this.realign = false;
-        }*/
+        let xDiff = Math.abs(this.position.x - this.realignPos.x);
+        let yDiff = Math.abs(this.position.y - this.realignPos.y);
+        //going up or down, adjust horizontally
+        if(this.direction.x == 0 && xDiff > .1 && this.realign){
+            this.position.x = lerp(this.position.x, this.realignPos.x, .1);
+        }
+        //going left or right, adjust vertically
+        else if(this.direction.y == 0 && yDiff > .1 && this.realign){
+            this.position.y = lerp(this.position.y, this.realignPos.y, .1);
+        }
+        else {this.realign = false;}
 
         let velocity = Vector2.multiply(this.direction, this.speed);
         this.position = Vector2.add(this.position, velocity);
