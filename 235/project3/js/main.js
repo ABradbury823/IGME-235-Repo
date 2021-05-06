@@ -20,7 +20,7 @@ let stage;
 
 // game variables
 let startScene;
-let gameScene, levelText, goldText, track;
+let gameScene, levelText, goldText, track, goldRate;
 let gameOverScene;
 
 let trackNodes = [];
@@ -28,10 +28,11 @@ let troops = [];
 let levelNum = 1;
 let gold = 0;
 let paused = true;
+let selecting = false;
 
 function setup() {
 	stage = app.stage;
-	app.renderer.backgroundColor = 0xe4e88e;
+	app.renderer.backgroundColor = 0x13871f;
 	// #1 - Create the `start` scene
 	startScene = new PIXI.Container();
 	stage.addChild(startScene);
@@ -65,10 +66,6 @@ function setup() {
 
 	track = new Track(trackNodes, 50);
 	track.draw();
-
-	let troop = new Troop(trackNodes[0].x, trackNodes[0].y, 2);
-	troops.push(troop);
-	gameScene.addChild(troops[0]);
 	
 	// #6 - Load Sounds
 	
@@ -90,7 +87,7 @@ function createButtonsAndLabels(){
 		fill: 0xFFFFFF,
 		fontSize: 60,
 		fontFamily: 'Comic Sans',
-		stroke: 0x999999,
+		stroke: 0x222222,
 		strokeThickness: 5
 	});
 
@@ -119,7 +116,7 @@ function createButtonsAndLabels(){
 		fill: 0xFFFFFF,
 		fontSize: 20,
 		fontFamily: 'Comic Sans',
-		stroke: 0x999999,
+		stroke: 0x222222,
 		strokeThickness: 3
 	});
 
@@ -151,6 +148,17 @@ function createButtonsAndLabels(){
 	endGameButton.on("pointerout", e=>{e.currentTarget.alpha = 1;});
 	gameScene.addChild(endGameButton);
 
+	let spawnTroop = new PIXI.Text("Spawn Troop");
+	spawnTroop.style = gameTextStyle;
+	spawnTroop.x = 5;
+	spawnTroop.y = 200;
+	spawnTroop.interactive = true;
+	spawnTroop.buttonMode = true;
+	spawnTroop.on("pointerup", addTroop);
+	spawnTroop.on("pointerover", e=>{e.target.alpha = .7;});
+	spawnTroop.on("pointerout", e=>{e.currentTarget.alpha = 1;});
+	gameScene.addChild(spawnTroop);
+
 	//**game over scene**
 	//game over text
 	let gameOverText = new PIXI.Text("Game Over");
@@ -180,6 +188,12 @@ function startGame(){
 	gameScene.visible = true;
 
 	//more when levels, player, and enemies are built
+	levelNum = 1;
+	gold = 100;
+	goldRate = 1/20 * levelNum;
+	paused = false;
+
+
 	app.ticker.add(update);
 }
 
@@ -193,6 +207,15 @@ function gameOver(){
 	//clean out scene
 }
 
+function addTroop(){
+	if(gold >= 50){
+		changeGoldAmount(-50);
+		let troop = new Troop(trackNodes[0].x, trackNodes[0].y, 2, 20);
+		troops.push(troop);
+		gameScene.addChild(troops[troops.length - 1]);
+	}
+}
+
 //PURPOSE: Change the level the player is currently on
 //ARGUMENTS: Level to change to
 function changeLevelTo(level){
@@ -202,11 +225,28 @@ function changeLevelTo(level){
 
 //PURPOSE: Change the player's gold amount
 //ARGUMENT: The amount of gold to give or take from the player
-function changeGoldAmount(rate){
-	gold += rate;
-	goldText.text = `Gold: ${gold}`;
+function changeGoldAmount(amount){
+	gold += amount;
+	goldText.text = `Gold: ${Math.trunc(gold)}`;
 }
 
 function update(){
-	troops[0].move();
+	if(paused){return;}
+	
+	let deltaTime = 1 / app.ticker.FPS;
+	if(deltaTime <= 1/12){deltaTime = 1/12;}
+	
+	if(!selecting){
+		changeGoldAmount(1 / 20);
+
+		for(let i = 0; i < troops.length; i++){
+			if(troops[i].position.y < -troops[i].size){
+				troops[i].isAlive = false;
+			}
+			
+			if(troops[i].isAlive){
+				troops[i].move();
+			}
+		}
+	}
 }

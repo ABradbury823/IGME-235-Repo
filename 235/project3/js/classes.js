@@ -34,7 +34,7 @@ class Track{
             let dirOffset = Vector2.multiply(this.nodes[i].direction, this.halfWidth / 2);
 
             let line = new PIXI.Graphics();
-            line.lineStyle(this.halfWidth, 0x00FF00, 1);
+            line.lineStyle(this.halfWidth, 0x61450a, 1);
             line.moveTo(this.nodes[i].x, this.nodes[i].y);
             line.lineTo(this.nodes[i + 1].x + dirOffset.x, this.nodes[i + 1].y + dirOffset.y);
             this.trackLines.push(line);
@@ -46,7 +46,7 @@ class Track{
 
 //Troop class that represents one of the player's troops
 class Troop extends PIXI.Graphics{
-    constructor(x, y, speed){
+    constructor(x, y, speed, health){
         super();
         this.size = 20;
         this.position = new Vector2(x - this.size / 2, y - this.size / 2);
@@ -56,6 +56,8 @@ class Troop extends PIXI.Graphics{
         this.targetIndex = 1;
         this.realign = false;
         this.realignPos = new Vector2();
+        this.isAlive = true;
+        this.health = health;
 
         this.beginFill(0xFFFF00);
         this.drawRect(0, 0, this.size, this.size);
@@ -70,13 +72,6 @@ class Troop extends PIXI.Graphics{
             this.realignPos = Vector2.add(this.position, Vector2.multiply(this.direction, dist));
             this.direction = this.target.direction;
             this.targetIndex++;
-            this.target = trackNodes[this.targetIndex];
-        }
-
-        else if(isColliding(this, this.target) && this.targetIndex == trackNodes.length - 1){
-            this.position = new Vector2(trackNodes[0].x - this.size / 2, trackNodes[0].y - this.size / 2);
-            this.direction = this.target.direction;
-            this.targetIndex = 0;
             this.target = trackNodes[this.targetIndex];
         }
 
