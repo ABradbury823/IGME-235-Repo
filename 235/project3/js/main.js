@@ -20,11 +20,13 @@ let stage;
 
 // game variables
 let startScene;
-let gameScene, levelText, goldText, track, goldRate;
+let gameScene, levelText, goldText, track, goldRate, spawnTroop;
 let gameOverScene;
 
 let trackNodes = [];
 let troops = [];
+let enemies = [];
+let bullets = [];
 let levelNum = 1;
 let gold = 0;
 let paused = true;
@@ -148,7 +150,7 @@ function createButtonsAndLabels(){
 	endGameButton.on("pointerout", e=>{e.currentTarget.alpha = 1;});
 	gameScene.addChild(endGameButton);
 
-	let spawnTroop = new PIXI.Text("Spawn Troop");
+	spawnTroop = new PIXI.Text("Spawn Troop");
 	spawnTroop.style = gameTextStyle;
 	spawnTroop.x = 5;
 	spawnTroop.y = 200;
@@ -193,6 +195,10 @@ function startGame(){
 	goldRate = 1/20 * levelNum;
 	paused = false;
 
+	//make enemy towers
+	let enemy = new Enemy(100, 300, 150);
+	enemies.push(enemy);
+	gameScene.addChild(enemies[enemies.length - 1]);
 
 	app.ticker.add(update);
 }
@@ -237,7 +243,16 @@ function update(){
 	if(deltaTime <= 1/12){deltaTime = 1/12;}
 	
 	if(!selecting){
-		changeGoldAmount(1 / 20);
+		changeGoldAmount(goldRate);
+
+		if(gold < 50){
+			spawnTroop.interactive = false;
+			spawnTroop.alpha = .7;
+		}
+		else{
+			spawnTroop.interactive = true;
+			spawnTroop.alpha = 1.0;
+		}
 
 		for(let i = 0; i < troops.length; i++){
 			if(troops[i].position.y < -troops[i].size){
@@ -245,7 +260,23 @@ function update(){
 			}
 			
 			if(troops[i].isAlive){
-				troops[i].move();
+				troops[i].move(deltaTime);
+			}
+
+			for(let j = 0; j < enemies.length; j++){
+				if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) <= enemies[j].radius){
+					enemies[j].followTarget();
+					continue;
+				}
+
+				else if(Vector2.distance(troops[i].position, enemies[j].position) <= enemies[j].radius && enemies[j].target == null){
+					enemies[j].target = troops[i];
+					enemies[j].followTarget();
+				}
+
+				if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) > enemies[j].radius){
+					enemies[j].target = null;
+				}
 			}
 		}
 	}
