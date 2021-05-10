@@ -196,8 +196,11 @@ function startGame(){
 	paused = false;
 
 	//make enemy towers
-	let enemy = new Enemy(100, 300, 150);
+	let enemy = new Enemy(100, 300, 150, 4);
 	enemies.push(enemy);
+	gameScene.addChild(enemies[enemies.length - 1]);
+	let enemy2 = new Enemy(620, 240, 150, 4);
+	enemies.push(enemy2);
 	gameScene.addChild(enemies[enemies.length - 1]);
 
 	app.ticker.add(update);
@@ -213,10 +216,12 @@ function gameOver(){
 	//clean out scene
 }
 
+//PURPOSE: Add another troop at the beginning of the track
+//ARGUMENTS: --
 function addTroop(){
 	if(gold >= 50){
 		changeGoldAmount(-50);
-		let troop = new Troop(trackNodes[0].x, trackNodes[0].y, 2, 20);
+		let troop = new Troop(trackNodes[0].x, trackNodes[0].y, 20, 5);
 		troops.push(troop);
 		gameScene.addChild(troops[troops.length - 1]);
 	}
@@ -236,6 +241,8 @@ function changeGoldAmount(amount){
 	goldText.text = `Gold: ${Math.trunc(gold)}`;
 }
 
+//PURPOSE: Update screen each frame
+//ARGUMENTS: --
 function update(){
 	if(paused){return;}
 	
@@ -263,20 +270,63 @@ function update(){
 				troops[i].move(deltaTime);
 			}
 
+			//have enemies track troops
 			for(let j = 0; j < enemies.length; j++){
+				if(i == 0){
+					enemies[j].shotTimer -= deltaTime;
+				}
+
 				if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) <= enemies[j].radius){
-					enemies[j].followTarget();
+					if(enemies[j].shotTimer <= 0){
+						enemies[j].shotTimer = enemies[j].fireSpeed;
+						enemies[j].shoot(deltaTime);
+					}
+
+					//enemies[j].followTarget(deltaTime);
+
+					if(!enemies[j].target.isAlive){
+						enemies[j].target = null;
+					}
+					
 					continue;
 				}
 
 				else if(Vector2.distance(troops[i].position, enemies[j].position) <= enemies[j].radius && enemies[j].target == null){
+					if(!troops[i].isAlive){
+						continue;
+					}
+
 					enemies[j].target = troops[i];
-					enemies[j].followTarget();
+					//enemies[j].followTarget(deltaTime);
 				}
 
 				if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) > enemies[j].radius){
 					enemies[j].target = null;
 				}
+			}
+		}
+
+		//move bullets
+		for(let i = 0; i < bullets.length; i++){
+			if(bullets[i].isAlive){
+				bullets[i].move(deltaTime);
+			}
+		}
+
+		//clean up dead troops and bullets
+		for(let t = 0; t < troops.length; t++){
+			if(!troops[t].isAlive){
+				gameScene.removeChild(troops[t]);
+				troops.splice(t, 1);
+				t--;
+			}
+		}
+
+		for(let b = 0; b < bullets.length; b++){
+			if(!bullets[b].isAlive){
+				gameScene.removeChild(bullets[b]);
+				bullets.splice(b, 1);
+				b--;
 			}
 		}
 	}

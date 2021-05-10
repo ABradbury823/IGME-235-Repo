@@ -65,8 +65,8 @@ class Troop extends PIXI.Graphics{
     }
 
     move(dt){
+        //turn when you reach a corner
         if(isColliding(this, this.target) && this.targetIndex < trackNodes.length - 1){
-            //console.log("collision");
             this.realign = true;
             let dist = this.target.size + this.size / 2
             this.realignPos = Vector2.add(this.position, Vector2.multiply(this.direction, dist));
@@ -77,10 +77,12 @@ class Troop extends PIXI.Graphics{
 
         let xDiff = Math.abs(this.position.x - this.realignPos.x);
         let yDiff = Math.abs(this.position.y - this.realignPos.y);
+
         //going up or down, adjust horizontally
         if(this.direction.x == 0 && xDiff > .1 && this.realign){
             this.position.x = lerp(this.position.x, this.realignPos.x, .1);
         }
+
         //going left or right, adjust vertically
         else if(this.direction.y == 0 && yDiff > .1 && this.realign){
             this.position.y = lerp(this.position.y, this.realignPos.y, .1);
@@ -88,16 +90,23 @@ class Troop extends PIXI.Graphics{
         else {this.realign = false;}
 
         let velocity = Vector2.multiply(this.direction, this.speed);
-        //velocity = velocity.multiply(dt);
+        velocity = velocity.multiply(dt);
         this.position = Vector2.add(this.position, velocity);
         this.x = this.position.x;
         this.y = this.position.y;
+    }
+
+    decreaseHealth(amount){
+        this.health -= amount;
+        if(this.health <= 0){
+            this.isAlive = false;
+        }
     }
 }
 
 //Enemy class that shoots at the player's troops
 class Enemy extends PIXI.Graphics{
-    constructor(x, y, radius){
+    constructor(x, y, radius, firingSpeed){
         super();
         this.size = 20;
         this.position = new Vector2(x - this.size / 2, y - this.size / 2);
@@ -106,6 +115,8 @@ class Enemy extends PIXI.Graphics{
         this.pivot.x = this.size / 2;
         this.pivot.y = this.size / 2;
         this.direction = Vector2.down();
+        this.fireSpeed = firingSpeed;
+        this.shotTimer = 0;
 
         //radius circle
         this.beginFill(0x00FFFF, .3);
@@ -117,16 +128,58 @@ class Enemy extends PIXI.Graphics{
         this.endFill();
     }
 
-    followTarget(){
+    followTarget(dt){
         let towerToTarget = Vector2.subtract(this.target.position, this.position);
         let angle = Vector2.dot(this.direction, towerToTarget);
-        //console.log(angle);
-        //if above, angle is negative
-        
         angle = angle / (this.direction.magnitude() * towerToTarget.magnitude());
         angle = Math.acos(angle);
-        this.rotation = -angle;
-        //this.direction = towerToTarget.normalize();
+        this.rotation = -angle * dt;
+    }
+
+    shoot(dt){
+        let targetPos = Vector2.add(this.target.position, (new Vector2(this.target.size, this.target.size)));
+        let targetVelocity = Vector2.multiply(this.target.direction, this.target.speed).multiply(dt);
+        let bulletDirection = Vector2.subtract(targetPos, this.position);
+        bulletDirection = bulletDirection.add(targetVelocity) //add targets velocity for better aim
+        bulletDirection.normalize();
+        let bulletDist =  Vector2.subtract(this.target.position, this.position).magnitude() //expire at target position (guarantee hit)
+        let bullet = new Bullet(this.position.x, this.position.y, 200, bulletDirection, bulletDist);
+        bullets.push(bullet);
+        gameScene.addChild(bullet);
+        this.target.decreaseHealth(1);
+    }
+}
+
+//Bullet that towers shoot
+class Bullet extends PIXI.Graphics{
+    constructor(x, y, speed, direction, distance){
+        super();
+        this.size = 5;
+        this.position = new Vector2(x - this.size / 2, y - this.size / 2);
+        this.start = new Vector2(x - this.size / 2, y - this.size / 2);
+        this.pivot.x = this.size / 2;
+        this.pivot.y = this.size / 2;
+        this.speed = speed;
+        this.direction = direction;
+        this.isAlive = true;
+        this.distance = distance;
+
+        this.beginFill(0xFFFFFF);
+        this.drawRect(0, 0, this.size, this.size);
+        this.endFill();
+    }
+
+    move(dt){
+        if(this.distance <= 0){
+            this.isAlive = false;
+        }
+
+        let velocity = Vector2.multiply(this.direction, this.speed);
+        velocity = velocity.multiply(dt);
+        this.distance -= velocity.magnitude();
+        this.position = Vector2.add(this.position, velocity);
+        this.x = this.position.x;
+        this.y = this.position.y;
     }
 }
 
