@@ -58,10 +58,26 @@ class Troop extends PIXI.Graphics{
         this.realignPos = new Vector2();
         this.isAlive = true;
         this.health = health;
+        this.maxHealth = health;
 
         this.beginFill(0xFFFF00);
         this.drawRect(0, 0, this.size, this.size);
         this.endFill();
+
+        //health bar (red)
+        this.healthBarRed = new PIXI.Graphics();
+        this.healthBarRed.beginFill(0xFF0000);
+        this.healthBarRed.lineStyle(1, 0xFFFFFF);
+        this.healthBarRed.drawRect(0, this.size / 2, this.size, 5)
+        this.healthBarRed.endFill();
+        gameScene.addChild(this.healthBarRed);
+
+        //health bar(green)
+        this.healthBarGreen = new PIXI.Graphics();
+        this.healthBarGreen.beginFill(0x00FF00);
+        this.healthBarGreen.drawRect(0, this.size / 2, this.size, 5)
+        this.healthBarGreen.endFill();
+        gameScene.addChild(this.healthBarGreen);
     }
 
     move(dt){
@@ -94,12 +110,19 @@ class Troop extends PIXI.Graphics{
         this.position = Vector2.add(this.position, velocity);
         this.x = this.position.x;
         this.y = this.position.y;
+        this.healthBarGreen.x = this.position.x;
+        this.healthBarGreen.y = this.position.y - this.size;
+        this.healthBarRed.x = this.position.x;
+        this.healthBarRed.y = this.position.y - this.size;
     }
 
     decreaseHealth(amount){
+        this.healthBarGreen.width -= (amount / this.maxHealth) * this.size;
         this.health -= amount;
         if(this.health <= 0){
             this.isAlive = false;
+            gameScene.removeChild(this.healthBarRed);
+            gameScene.removeChild(this.healthBarGreen);
         }
     }
 }
