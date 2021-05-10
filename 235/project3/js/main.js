@@ -65,7 +65,6 @@ function setup() {
 	];
 
 	for(let i = 0; i < trackNodes.length; i++){gameScene.addChild(trackNodes[i]);}
-
 	track = new Track(trackNodes, 50);
 	track.draw();
 	
@@ -73,12 +72,6 @@ function setup() {
 	
 	// #7 - Load sprite sheet
 		
-	// #8 - Start update loop
-	
-	// #9 - Start listening for click events on the canvas
-	
-	// Now our `startScene` is visible
-	// Clicking the button calls startGame()
 }
 
 //PURPOSE: Set up all buttons and labels in game
@@ -153,7 +146,7 @@ function createButtonsAndLabels(){
 	spawnTroop = new PIXI.Text("Spawn Troop");
 	spawnTroop.style = gameTextStyle;
 	spawnTroop.x = 5;
-	spawnTroop.y = 200;
+	spawnTroop.y = 100;
 	spawnTroop.interactive = true;
 	spawnTroop.buttonMode = true;
 	spawnTroop.on("pointerup", addTroop);
@@ -191,9 +184,10 @@ function startGame(){
 
 	//more when levels, player, and enemies are built
 	levelNum = 1;
-	gold = 100;
-	goldRate = 1/20 * levelNum;
+	goldRate = (1/20) * levelNum;
 	paused = false;
+	selecting = true;
+	changeGoldAmount(100);
 
 	//make enemy towers
 	let enemy = new Enemy(100, 300, 150, 4);
@@ -213,7 +207,25 @@ function gameOver(){
 	gameScene.visible = false;
 	gameOverScene.visible = true;
 
+	app.ticker.remove(update);
+
 	//clean out scene
+	for(let i = 0; i < enemies.length; i++){
+		gameScene.removeChild(enemies[i]);
+		enemies.shift();
+		i--;
+	}
+
+	paused = true;
+	selecting = true;
+	changeGoldAmount(-gold);
+	changeLevelTo(1);
+	goldRate = 0;
+
+	killAll(bullets);
+	killAll(troops);
+	cleanUpObejcts(bullets);
+	cleanUpObejcts(troops);
 }
 
 //PURPOSE: Add another troop at the beginning of the track
@@ -248,86 +260,106 @@ function update(){
 	
 	let deltaTime = 1 / app.ticker.FPS;
 	if(deltaTime <= 1/12){deltaTime = 1/12;}
+
+	//only earn gold if you have troops on the track
+	if(troops.length == 0){selecting = true;}
+	else{selecting = false;}
 	
 	if(!selecting){
 		changeGoldAmount(goldRate);
+	}
 
-		if(gold < 50){
-			spawnTroop.interactive = false;
-			spawnTroop.alpha = .7;
+	//player can't buy troops if they don't have funds
+	if(gold < 50){
+		spawnTroop.interactive = false;
+		spawnTroop.alpha = .7;
+
+		if(troops.length == 0){
+			gameOver();
+			return;
 		}
-		else{
-			spawnTroop.interactive = true;
-			spawnTroop.alpha = 1.0;
+	}
+	else{
+		spawnTroop.interactive = true;
+		spawnTroop.alpha = 1.0;
+	}
+
+	for(let i = 0; i < troops.length; i++){
+		if(troops[i].position.y < -troops[i].size){
+			troops[i].isAlive = false;
+		}
+		
+		if(troops[i].isAlive){
+			troops[i].move(deltaTime);
 		}
 
-		for(let i = 0; i < troops.length; i++){
-			if(troops[i].position.y < -troops[i].size){
-				troops[i].isAlive = false;
-			}
-			
-			if(troops[i].isAlive){
-				troops[i].move(deltaTime);
+		//have enemies track troops
+		for(let j = 0; j < enemies.length; j++){
+			if(i == 0){
+				enemies[j].shotTimer -= deltaTime;
 			}
 
-			//have enemies track troops
-			for(let j = 0; j < enemies.length; j++){
-				if(i == 0){
-					enemies[j].shotTimer -= deltaTime;
+			if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) <= enemies[j].radius){
+				if(enemies[j].shotTimer <= 0){
+					enemies[j].shotTimer = enemies[j].fireSpeed;
+					enemies[j].shoot(deltaTime);
 				}
 
-				if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) <= enemies[j].radius){
-					if(enemies[j].shotTimer <= 0){
-						enemies[j].shotTimer = enemies[j].fireSpeed;
-						enemies[j].shoot(deltaTime);
-					}
-
-					//enemies[j].followTarget(deltaTime);
-
-					if(!enemies[j].target.isAlive){
-						enemies[j].target = null;
-					}
+				if(!enemies[j].target.isAlive){
+					enemies[j].target = null;
+				}
 					
+				continue;
+			}
+
+			else if(Vector2.distance(troops[i].position, enemies[j].position) <= enemies[j].radius && enemies[j].target == null){
+				if(!troops[i].isAlive){
 					continue;
 				}
 
-				else if(Vector2.distance(troops[i].position, enemies[j].position) <= enemies[j].radius && enemies[j].target == null){
-					if(!troops[i].isAlive){
-						continue;
-					}
+				enemies[j].target = troops[i];
+			}
 
-					enemies[j].target = troops[i];
-					//enemies[j].followTarget(deltaTime);
-				}
-
-				if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) > enemies[j].radius){
-					enemies[j].target = null;
-				}
+			if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) > enemies[j].radius){
+				enemies[j].target = null;
 			}
 		}
+	}
 
-		//move bullets
-		for(let i = 0; i < bullets.length; i++){
-			if(bullets[i].isAlive){
-				bullets[i].move(deltaTime);
-			}
+	//move bullets
+	for(let i = 0; i < bullets.length; i++){
+		if(bullets[i].isAlive){
+			bullets[i].move(deltaTime);
 		}
+	}
 
-		//clean up dead troops and bullets
-		for(let t = 0; t < troops.length; t++){
-			if(!troops[t].isAlive){
-				gameScene.removeChild(troops[t]);
-				troops.splice(t, 1);
-				t--;
-			}
+	//remove dead bullets and troops
+	cleanUpObejcts(bullets);
+	cleanUpObejcts(troops);
+}
+
+//PURPOSE: A clean up objects that are dead
+//ARGUMENTS: A list of game objects with the isAlive property
+function cleanUpObejcts(objList){
+	for(let i = 0; i < objList.length; i++){
+		if(!objList[i].isAlive){
+			gameScene.removeChild(objList[i]);
+			objList.splice(i, 1);
+			i--;
 		}
+	}
+}
 
-		for(let b = 0; b < bullets.length; b++){
-			if(!bullets[b].isAlive){
-				gameScene.removeChild(bullets[b]);
-				bullets.splice(b, 1);
-				b--;
-			}
+//PURPOSE: A very dramatic sounding function that toggles alive status of gameObjects
+//ARGUMENTS: A list of game objects with the isAlive property
+function killAll(objList){
+	for(let i = 0; i < objList.length; i++){
+		objList[i].isAlive = false;
+
+		//remove health bar if it has one
+		if(objList[i].healthBarGreen && objList[i].healthBarRed){
+			gameScene.removeChild(objList[i].healthBarGreen);
+			gameScene.removeChild(objList[i].healthBarRed);
 		}
 	}
 }
