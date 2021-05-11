@@ -46,7 +46,7 @@ class Track{
 
 //Troop class that represents one of the player's troops
 class Troop extends PIXI.Graphics{
-    constructor(x, y, speed, health){
+    constructor(x, y, speed, health, damage, attackSpeed){
         super();
         this.size = 20;
         this.position = new Vector2(x - this.size / 2, y - this.size / 2);
@@ -59,6 +59,9 @@ class Troop extends PIXI.Graphics{
         this.isAlive = true;
         this.health = health;
         this.maxHealth = health;
+        this.damage = damage;
+        this.attackSpeed = attackSpeed;
+        this.attackTimer = attackSpeed;
 
         this.beginFill(0xFFFF00);
         this.drawRect(0, 0, this.size, this.size);
@@ -125,6 +128,15 @@ class Troop extends PIXI.Graphics{
             gameScene.removeChild(this.healthBarGreen);
         }
     }
+
+    attack(dt){
+        this.attackTimer -= dt;
+
+        if(this.attackTimer <= 0){
+            this.attackTimer = this.attackSpeed;
+            barricade.changeHealth(this.damage);
+        }
+    }
 }
 
 //Enemy class that shoots at the player's troops
@@ -140,6 +152,7 @@ class Enemy extends PIXI.Graphics{
         this.direction = Vector2.down();
         this.fireSpeed = firingSpeed;
         this.shotTimer = 0;
+        this.damage = 1;
 
         //radius circle
         this.beginFill(0x00FFFF, .3);
@@ -169,7 +182,7 @@ class Enemy extends PIXI.Graphics{
         let bullet = new Bullet(this.position.x, this.position.y, 200, bulletDirection, bulletDist);
         bullets.push(bullet);
         gameScene.addChild(bullet);
-        this.target.decreaseHealth(1);
+        this.target.decreaseHealth(this.damage);
     }
 }
 
@@ -180,8 +193,6 @@ class Bullet extends PIXI.Graphics{
         this.size = 5;
         this.position = new Vector2(x - this.size / 2, y - this.size / 2);
         this.start = new Vector2(x - this.size / 2, y - this.size / 2);
-        this.pivot.x = this.size / 2;
-        this.pivot.y = this.size / 2;
         this.speed = speed;
         this.direction = direction;
         this.isAlive = true;
@@ -207,4 +218,56 @@ class Bullet extends PIXI.Graphics{
 }
 
 //Barricade class: "enemy" that has hit points, cannot attack, and marks the end of the level if destroyed
+class Barricade extends PIXI.Graphics{
+    constructor(x, y, health, isHorizontal){
+        super();
+        if(isHorizontal){
+            this.size = new Vector2(100, 50);
+        }
+        else{
+            this.size = new Vector2(50, 100);
+        }
+
+        this.position = new Vector2(x - this.size.x / 2, y - this.size.y / 2);
+        this.health = health;
+        this.maxHealth = health;
+        this.isAlive = true;
+
+        this.beginFill(0x111111);
+        this.drawRect(0, 0, this.size.x, this.size.y);
+        this.endFill();
+
+        //health bar (red)
+        this.healthBarRed = new PIXI.Graphics();
+        this.healthBarRed.beginFill(0xFF0000);
+        this.healthBarRed.lineStyle(1, 0xFFFFFF);
+        this.healthBarRed.drawRect(0, this.size.y / 1.5, this.size.x, 5)
+        this.healthBarRed.endFill();
+        this.healthBarRed.x = this.position.x
+        gameScene.addChild(this.healthBarRed);
+
+        //health bar(green)
+        this.healthBarGreen = new PIXI.Graphics();
+        this.healthBarGreen.beginFill(0x00FF00);
+        this.healthBarGreen.drawRect(0, this.size.y / 1.5, this.size.x, 5)
+        this.healthBarGreen.endFill();
+        this.healthBarGreen.x = this.position.x
+        gameScene.addChild(this.healthBarGreen);
+    }
+
+    destroy(){
+        this.isAlive = false;
+        gameScene.removeChild(this.healthBarRed);
+        gameScene.removeChild(this.healthBarGreen);
+        changeGoldAmount(100);
+    }
+
+    changeHealth(amount){
+        this.healthBarGreen.width -= (amount / this.maxHealth) * this.size.x;
+        this.health -= amount;
+        if(this.health <= 0){
+            this.destroy();
+        }
+    }
+}
 

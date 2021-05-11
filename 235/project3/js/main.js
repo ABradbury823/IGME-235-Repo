@@ -27,6 +27,7 @@ let trackNodes = [];
 let troops = [];
 let enemies = [];
 let bullets = [];
+let barricade = null;
 let levelNum = 1;
 let gold = 0;
 let paused = true;
@@ -197,6 +198,10 @@ function startGame(){
 	enemies.push(enemy2);
 	gameScene.addChild(enemies[enemies.length - 1]);
 
+	//make barricade at the end
+	barricade = new Barricade(trackNodes[trackNodes.length - 1].x, 0, 100, true);
+	gameScene.addChild(barricade);
+
 	app.ticker.add(update);
 }
 
@@ -216,6 +221,9 @@ function gameOver(){
 		i--;
 	}
 
+	gameScene.removeChild(barricade);
+	barricade.destroy();
+
 	paused = true;
 	selecting = true;
 	changeGoldAmount(-gold);
@@ -233,7 +241,7 @@ function gameOver(){
 function addTroop(){
 	if(gold >= 50){
 		changeGoldAmount(-50);
-		let troop = new Troop(trackNodes[0].x, trackNodes[0].y, 20, 5);
+		let troop = new Troop(trackNodes[0].x, trackNodes[0].y, 30, 10, 10, 3);
 		troops.push(troop);
 		gameScene.addChild(troops[troops.length - 1]);
 	}
@@ -290,7 +298,12 @@ function update(){
 		}
 		
 		if(troops[i].isAlive){
-			troops[i].move(deltaTime);
+			if(!isColliding(troops[i], barricade) || !barricade.isAlive){
+				troops[i].move(deltaTime);
+			}
+			else{
+				troops[i].attack(deltaTime);
+			}
 		}
 
 		//have enemies track troops
@@ -299,6 +312,7 @@ function update(){
 				enemies[j].shotTimer -= deltaTime;
 			}
 
+			//keep tracking your target unless if it dies
 			if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) <= enemies[j].radius){
 				if(enemies[j].shotTimer <= 0){
 					enemies[j].shotTimer = enemies[j].fireSpeed;
@@ -312,14 +326,12 @@ function update(){
 				continue;
 			}
 
+			//target a troop that enters your attack radius
 			else if(Vector2.distance(troops[i].position, enemies[j].position) <= enemies[j].radius && enemies[j].target == null){
-				if(!troops[i].isAlive){
-					continue;
-				}
-
 				enemies[j].target = troops[i];
 			}
 
+			//stop targeting if your target leaves your radius
 			if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) > enemies[j].radius){
 				enemies[j].target = null;
 			}
@@ -333,9 +345,12 @@ function update(){
 		}
 	}
 
-	//remove dead bullets and troops
+	//remove dead objects
 	cleanUpObejcts(bullets);
 	cleanUpObejcts(troops);
+	if(!barricade.isAlive){
+		gameScene.removeChild(barricade);
+	}
 }
 
 //PURPOSE: A clean up objects that are dead
