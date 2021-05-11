@@ -24,7 +24,6 @@ let gameScene, levelText, goldText, track, goldRate, spawnTroopButton, shootSoun
 let gameOverScene;
 let victoryScene;
 
-let trackNodes = [];
 let troops = [];
 let enemies = [];
 let bullets = [];
@@ -34,6 +33,9 @@ let gold = 0;
 let paused = true;
 let selecting = false;
 let victory = false;
+let level1, level2, level3;
+let levels = [];
+let level = null;
 
 function setup() {
 	stage = app.stage;
@@ -60,22 +62,9 @@ function setup() {
 	// Create labels for all 3 scenes
 	createButtonsAndLabels();
 
-	// Create levels
-	trackNodes = [
-				new TrackNode(600, HEIGHT + 10),		//starting node
-				new TrackNode(600, 500, -1, 0),
-				new TrackNode(100, 500, 0, -1),
-				new TrackNode(100, 400, 1, 0),
-				new TrackNode(700, 400, 0, -1),
-				new TrackNode(700, 300, -1, 0),
-				new TrackNode(200, 300, 0, -1),
-				new TrackNode(200, -10)					//ending node
-	];
+	// Create levels	
+	generateLevels();
 
-	for(let i = 0; i < trackNodes.length; i++){gameScene.addChild(trackNodes[i]);}
-	track = new Track(trackNodes, 50);
-	track.draw();
-	
 	// Load Sounds
 	shootSound = new Howl({
 		src: ["media/sounds/projectile.wav"]
@@ -177,7 +166,7 @@ function createButtonsAndLabels(){
 	spawnTroopButton.y = 100;
 	spawnTroopButton.interactive = true;
 	spawnTroopButton.buttonMode = true;
-	spawnTroopButton.on("pointerup", addTroop);
+	spawnTroopButton.on("pointerup", addBasicTroop);
 	spawnTroopButton.on("pointerover", e=>{e.target.alpha = .7;});
 	spawnTroopButton.on("pointerout", e=>{e.currentTarget.alpha = 1;});
 	gameScene.addChild(spawnTroopButton);
@@ -237,24 +226,8 @@ function startGame(){
 	app.renderer.backgroundColor = 0x13871f;
 	clickSound.play();
 
-	//more when levels, player, and enemies are built
-	levelNum = 1;
-	goldRate = (1/20) * levelNum;
-	paused = false;
-	selecting = true;
 	changeGoldAmount(100);
-
-	//make enemy towers
-	let enemy = new Enemy(100, 300, 150, 4);
-	enemies.push(enemy);
-	gameScene.addChild(enemies[enemies.length - 1]);
-	let enemy2 = new Enemy(620, 240, 150, 4);
-	enemies.push(enemy2);
-	gameScene.addChild(enemies[enemies.length - 1]);
-
-	//make barricade at the end
-	barricade = new Barricade(trackNodes[trackNodes.length - 1].x, 0, 100, true);
-	gameScene.addChild(barricade);
+	changeLevelTo(2);
 
 	app.ticker.add(update);
 }
@@ -267,6 +240,9 @@ function gameOver(){
 	gameOverScene.visible = true;
 	victoryScene.visible = false;
 
+	app.renderer.backgroundColor = 0x8F8F8F;
+	app.ticker.remove(update);
+
 	cleanScene();
 }
 
@@ -278,16 +254,15 @@ function win(){
 	gameOverScene.visible = false;
 	victoryScene.visible = true;
 
+	app.renderer.backgroundColor = 0x8F8F8F;
+	app.ticker.remove(update);
+
 	cleanScene();
 }
 
 //PURPOSE: Clean out everything from the scene
 //ARGUMENTS: --
 function cleanScene(){
-	app.renderer.backgroundColor = 0x8F8F8F;
-
-	app.ticker.remove(update);
-
 	//clean out scene
 	for(let i = 0; i < enemies.length; i++){
 		gameScene.removeChild(enemies[i]);
@@ -297,7 +272,7 @@ function cleanScene(){
 
 	gameScene.removeChild(barricade);
 
-	//no need to destory if player has already won
+	//no need to destroy if player has already won
 	if(!victory){
 		barricade.destroy();
 	}
@@ -314,13 +289,13 @@ function cleanScene(){
 	cleanUpObejcts(troops);
 }
 
-//PURPOSE: Add another troop at the beginning of the track
+//PURPOSE: Add basic troop at the beginning of the track
 //ARGUMENTS: --
-function addTroop(){
+function addBasicTroop(){
 	if(gold >= 50){
 		changeGoldAmount(-50);
 		moneySound.play();
-		let troop = new Troop(trackNodes[0].x, trackNodes[0].y, 30, 10, 10, 3);
+		let troop = new Troop(level.trackNodes[0].x, level.trackNodes[0].y);
 		troops.push(troop);
 		gameScene.addChild(troops[troops.length - 1]);
 	}
@@ -328,9 +303,30 @@ function addTroop(){
 
 //PURPOSE: Change the level the player is currently on
 //ARGUMENTS: Level to change to
-function changeLevelTo(level){
-	levelNum = level;
-	levelText.text = `Level: ${levelNum}`;
+function changeLevelTo(num){
+	if(num <= levels.length){
+		level = levels[num];
+		levelNum = level.id;
+		goldRate = level._goldRate
+		paused = false;
+		selecting = true;
+
+		level._track.draw();
+
+		//make enemy towers
+		for(let i = 0; i < level._enemies.length; i++){
+			let enemy = level._enemies[i];
+			enemies.push(enemy);
+			gameScene.addChild(enemy);
+		}
+
+		//make barricade at the end
+		barricade = level._barricade;
+		gameScene.addChild(barricade);
+		barricade.drawHealth();
+
+		levelText.text = `Level: ${levelNum}`;
+	}
 }
 
 //PURPOSE: Change the player's gold amount
@@ -359,29 +355,33 @@ function update(){
 	//player can't buy troops if they don't have funds
 	if(gold < 50){
 		spawnTroopButton.interactive = false;
-		spawnTroopButton.alpha = .7;
+		spawnTroopButton.alpha = .5;
 
 		if(troops.length == 0){
 			gameOver();
 			return;
 		}
 	}
-	else{
-		spawnTroopButton.interactive = true;
-		spawnTroopButton.alpha = 1.0;
-	}
+	else{ spawnTroopButton.interactive = true; }
 
 	for(let i = 0; i < troops.length; i++){
+		//you win if a troop gets off the screen
 		if(troops[i].position.y < -troops[i].size){
 			troops[i].isAlive = false;
+			if(level.id == levels.length){
+				victory = true;
+				win();
+				return;
+			}
 		}
 		
+		//attack the barricade if you run into it
 		if(troops[i].isAlive){
-			if(!isColliding(troops[i], barricade) || !barricade.isAlive){
-				troops[i].move(deltaTime);
+			if(isColliding(troops[i], barricade) && barricade.isAlive){
+				troops[i].attack(deltaTime);
 			}
 			else{
-				troops[i].attack(deltaTime);
+				troops[i].move(deltaTime);
 			}
 		}
 
@@ -430,7 +430,6 @@ function update(){
 	cleanUpObejcts(troops);
 	if(!barricade.isAlive){
 		gameScene.removeChild(barricade);
-		win();
 	}
 }
 
@@ -458,4 +457,57 @@ function killAll(objList){
 			gameScene.removeChild(objList[i].healthBarRed);
 		}
 	}
+}
+
+function generateLevels(){
+	level1 = {
+		id: 1,
+		trackNodes: [
+			new TrackNode(400, 610),            //start
+			new TrackNode(400, -10)             //end
+		],
+		_track: null,
+		_barricade: null,
+		_enemies: [new Enemy(350, 300, 100)],
+		_goldRate: 1 / 20
+	};
+	level1._track = new Track(level1.trackNodes);
+	level1._barricade = new Barricade(level1.trackNodes[level1.trackNodes.length - 1].x);
+	levels.push(level1);
+
+	level2 = {
+		id: 2,
+		trackNodes: [
+			new TrackNode(400, 610),            //start
+			new TrackNode(400, 300, 1, 0),
+			new TrackNode(600, 300, 0, -1),
+			new TrackNode(600, -10)             //end
+		],
+		_track: null,
+		_barricade: null,
+		_enemies: [new Enemy(500, 230, 150)],
+		_goldRate: 1 / 20
+	};
+	level2._track = new Track(level2.trackNodes);
+	level2._barricade = new Barricade(level2.trackNodes[level2.trackNodes.length - 1].x);
+	levels.push(level2);
+
+	level3 = {
+		id: 3,
+		trackNodes: [
+			new TrackNode(300, 610),            //start
+			new TrackNode(300, 400, 1, 0),
+			new TrackNode(500, 400, 0, -1),
+			new TrackNode(500, 200, -1, 0),
+			new TrackNode(300, 200, 0, -1),
+			new TrackNode(300, -10)             //end
+		],
+		_track: null,
+		_barricade: null,
+		_enemies: [new Enemy(400, 300, 175)],
+		_goldRate: 1 / 20
+	}
+	level3._track = new Track(level3.trackNodes);
+	level3._barricade = new Barricade(level3.trackNodes[level3.trackNodes.length - 1].x);
+	levels.push(level3);
 }
