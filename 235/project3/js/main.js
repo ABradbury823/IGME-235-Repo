@@ -22,6 +22,7 @@ let stage;
 let startScene;
 let gameScene, levelText, goldText, track, goldRate, spawnTroopButton, shootSound, destroySound, moneySound, hitSound, clickSound;
 let gameOverScene;
+let victoryScene;
 
 let trackNodes = [];
 let troops = [];
@@ -32,28 +33,34 @@ let levelNum = 1;
 let gold = 0;
 let paused = true;
 let selecting = false;
+let victory = false;
 
 function setup() {
 	stage = app.stage;
 	app.renderer.backgroundColor = 0x8F8F8F;
-	// #1 - Create the `start` scene
+	// Create the `start` scene
 	startScene = new PIXI.Container();
 	stage.addChild(startScene);
 	
-	// #2 - Create the main `game` scene and make it invisible
+	// Create the main `game` scene and make it invisible
 	gameScene = new PIXI.Container();
 	gameScene.visible = false;
 	stage.addChild(gameScene);
 
-	// #3 - Create the `gameOver` scene and make it invisible
+	// Create the `gameOver` scene and make it invisible
 	gameOverScene = new PIXI.Container();
 	gameOverScene.visible = false;
 	stage.addChild(gameOverScene);
 
-	// #4 - Create labels for all 3 scenes
+	// Create victoryScene, make it invisible
+	victoryScene = new PIXI.Container();
+	victoryScene.visible = false;
+	stage.addChild(victoryScene);
+
+	// Create labels for all 3 scenes
 	createButtonsAndLabels();
 
-	// #5 - Create track
+	// Create levels
 	trackNodes = [
 				new TrackNode(600, HEIGHT + 10),		//starting node
 				new TrackNode(600, 500, -1, 0),
@@ -69,7 +76,7 @@ function setup() {
 	track = new Track(trackNodes, 50);
 	track.draw();
 	
-	// #6 - Load Sounds
+	// Load Sounds
 	shootSound = new Howl({
 		src: ["media/sounds/projectile.wav"]
 	});
@@ -92,15 +99,13 @@ function setup() {
 		src: ["media/sounds/click.wav"],
 		volume: .15
 	});
-	// #7 - Load sprite sheet
-		
 }
 
 //PURPOSE: Set up all buttons and labels in game
 //ARGUMENTS: --
 function createButtonsAndLabels(){
 	//----placeholder style----
-	let startAndGameOverStyle = new PIXI.TextStyle({
+	let placeHolderStyle = new PIXI.TextStyle({
 		fill: 0xFFFFFF,
 		fontSize: 60,
 		fontFamily: 'Times New Roman',
@@ -111,14 +116,14 @@ function createButtonsAndLabels(){
 	//**start scene layout**
 	//Game name text
 	let startLabel = new PIXI.Text("Siege the Castle!");
-	startLabel.style = startAndGameOverStyle;
+	startLabel.style = placeHolderStyle;
 	startLabel.x = 175;
 	startLabel.y = 200;
 	startScene.addChild(startLabel);
 
 	//start game button
 	let startButton = new PIXI.Text("Start Game");
-	startButton.style = startAndGameOverStyle;
+	startButton.style = placeHolderStyle;
 	startButton.x = 250;
 	startButton.y = HEIGHT - 200;
 	startButton.interactive = true;
@@ -180,14 +185,14 @@ function createButtonsAndLabels(){
 	//**game over scene**
 	//game over text
 	let gameOverText = new PIXI.Text("Game Over");
-	gameOverText.style = startAndGameOverStyle;
+	gameOverText.style = placeHolderStyle;
 	gameOverText.x = 250;
 	gameOverText.y = 200;
 	gameOverScene.addChild(gameOverText);
 	
 	//play again button
 	let playAgainButton = new PIXI.Text("Play Again");
-	playAgainButton.style = startAndGameOverStyle;
+	playAgainButton.style = placeHolderStyle;
 	playAgainButton.x = 260;
 	playAgainButton.y = HEIGHT - 200;
 	playAgainButton.interactive = true;
@@ -196,6 +201,30 @@ function createButtonsAndLabels(){
 	playAgainButton.on("pointerover", e=>{e.target.alpha = .7;});
 	playAgainButton.on("pointerout", e=>{e.currentTarget.alpha = 1;});
 	gameOverScene.addChild(playAgainButton);
+
+	//**victory screen **
+	//victory text
+	let winText = new PIXI.Text("You Win!");
+	winText.style = placeHolderStyle;
+	winText.x = 280;
+	winText.y = 200;
+	victoryScene.addChild(winText);
+
+	//button to go back to start menu
+	let startMenuButton = new PIXI.Text("Start Menu");
+	startMenuButton.style = placeHolderStyle;
+	startMenuButton.x = 260;
+	startMenuButton.y = HEIGHT - 200;
+	startMenuButton.interactive = true;
+	startMenuButton.buttonMode = true;
+	startMenuButton.on("pointerup", e=> {
+		victoryScene.visible = false; 
+		startScene.visible = true;
+		clickSound.play();
+	});
+	startMenuButton.on("pointerover", e=>{e.target.alpha = .7;});
+	startMenuButton.on("pointerout", e=>{e.currentTarget.alpha = 1;});
+	victoryScene.addChild(startMenuButton);
 }
 
 //PURPOSE: Initialize game variables and start the game 
@@ -204,6 +233,7 @@ function startGame(){
 	startScene.visible = false;
 	gameOverScene.visible = false;
 	gameScene.visible = true;
+	victoryScene.visible = false;
 	app.renderer.backgroundColor = 0x13871f;
 	clickSound.play();
 
@@ -229,12 +259,31 @@ function startGame(){
 	app.ticker.add(update);
 }
 
-//PURPOSE: End game and empty out game scene
+//PURPOSE: Show game over and empty out game scene
 //ARGUMENTS: --
 function gameOver(){
 	startScene.visible = false;
 	gameScene.visible = false;
 	gameOverScene.visible = true;
+	victoryScene.visible = false;
+
+	cleanScene();
+}
+
+//PURPOSE: Show victory and empty out game scene
+//ARGUMENTS: --
+function win(){
+	startScene.visible = false;
+	gameScene.visible = false;
+	gameOverScene.visible = false;
+	victoryScene.visible = true;
+
+	cleanScene();
+}
+
+//PURPOSE: Clean out everything from the scene
+//ARGUMENTS: --
+function cleanScene(){
 	app.renderer.backgroundColor = 0x8F8F8F;
 
 	app.ticker.remove(update);
@@ -247,7 +296,11 @@ function gameOver(){
 	}
 
 	gameScene.removeChild(barricade);
-	barricade.destroy();
+
+	//no need to destory if player has already won
+	if(!victory){
+		barricade.destroy();
+	}
 
 	paused = true;
 	selecting = true;
@@ -377,6 +430,7 @@ function update(){
 	cleanUpObejcts(troops);
 	if(!barricade.isAlive){
 		gameScene.removeChild(barricade);
+		win();
 	}
 }
 

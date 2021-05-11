@@ -275,6 +275,7 @@ class Barricade extends PIXI.Graphics{
         this.healthBarGreen.width -= (amount / this.maxHealth) * this.size.x;
         this.health -= amount;
         if(this.health <= 0){
+            victory = true;
             this.destroy();
         }
         else{
