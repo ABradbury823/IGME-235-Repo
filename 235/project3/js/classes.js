@@ -44,7 +44,8 @@ class Track{
 }
 
 
-//Troop class that represents one of the player's troops
+//PURPOSE: Troop class that represents one of the player's troops
+//CONSTRUCTOR: X and Y position, how fast troop moves, maximum health, damage dealt to barricade, attack speed
 class Troop extends PIXI.Graphics{
     constructor(x, y, speed, health, damage, attackSpeed){
         super();
@@ -139,7 +140,8 @@ class Troop extends PIXI.Graphics{
     }
 }
 
-//Enemy class that shoots at the player's troops
+//PURPOSE: Enemy class that shoots at the player's troops
+//CONSTRUCTOR: X and Y position, detection radius of enemy, firing speed of enemy
 class Enemy extends PIXI.Graphics{
     constructor(x, y, radius, firingSpeed){
         super();
@@ -179,14 +181,15 @@ class Enemy extends PIXI.Graphics{
         bulletDirection = bulletDirection.add(targetVelocity) //add targets velocity for better aim
         bulletDirection.normalize();
         let bulletDist =  Vector2.subtract(this.target.position, this.position).magnitude() //expire at target position (guarantee hit)
-        let bullet = new Bullet(this.position.x, this.position.y, 200, bulletDirection, bulletDist);
+        let bullet = new Bullet(this.position.x, this.position.y, 300, bulletDirection, bulletDist);
         bullets.push(bullet);
         gameScene.addChild(bullet);
         this.target.decreaseHealth(this.damage);
     }
 }
 
-//Bullet that towers shoot
+//PURPOSE: Bullet that towers shoot
+//CONSTRUCTOR: X and Y positions, how fast the bullet moves, direction bullet will move in, how far bullet travels before disappearing
 class Bullet extends PIXI.Graphics{
     constructor(x, y, speed, direction, distance){
         super();
@@ -217,7 +220,8 @@ class Bullet extends PIXI.Graphics{
     }
 }
 
-//Barricade class: "enemy" that has hit points, cannot attack, and marks the end of the level if destroyed
+//PURPOSE: Barricade class that has hit points, cannot attack, and marks the end of the level if destroyed
+//CONSTRUCTOR: X and Y position of the barricade, maximum health, is this a horizontal barricade
 class Barricade extends PIXI.Graphics{
     constructor(x, y, health, isHorizontal){
         super();
@@ -233,7 +237,7 @@ class Barricade extends PIXI.Graphics{
         this.maxHealth = health;
         this.isAlive = true;
 
-        this.beginFill(0x111111);
+        this.beginFill(0xAAAAAA);
         this.drawRect(0, 0, this.size.x, this.size.y);
         this.endFill();
 
@@ -241,17 +245,17 @@ class Barricade extends PIXI.Graphics{
         this.healthBarRed = new PIXI.Graphics();
         this.healthBarRed.beginFill(0xFF0000);
         this.healthBarRed.lineStyle(1, 0xFFFFFF);
-        this.healthBarRed.drawRect(0, this.size.y / 1.5, this.size.x, 5)
+        this.healthBarRed.drawRect(0, this.size.y / 4 - 5, this.size.x, 5)
         this.healthBarRed.endFill();
-        this.healthBarRed.x = this.position.x
+        this.healthBarRed.x = this.position.x + this.size.x + 5;
         gameScene.addChild(this.healthBarRed);
 
         //health bar(green)
         this.healthBarGreen = new PIXI.Graphics();
         this.healthBarGreen.beginFill(0x00FF00);
-        this.healthBarGreen.drawRect(0, this.size.y / 1.5, this.size.x, 5)
+        this.healthBarGreen.drawRect(0, this.size.y / 4 - 5, this.size.x, 5)
         this.healthBarGreen.endFill();
-        this.healthBarGreen.x = this.position.x
+        this.healthBarGreen.x = this.position.x + this.size.x + 5;
         gameScene.addChild(this.healthBarGreen);
     }
 
@@ -259,7 +263,12 @@ class Barricade extends PIXI.Graphics{
         this.isAlive = false;
         gameScene.removeChild(this.healthBarRed);
         gameScene.removeChild(this.healthBarGreen);
-        changeGoldAmount(100);
+
+        if(this.health <= 0){
+            changeGoldAmount(100);
+            destroySound.play();
+            moneySound.play();
+        }
     }
 
     changeHealth(amount){
@@ -268,6 +277,8 @@ class Barricade extends PIXI.Graphics{
         if(this.health <= 0){
             this.destroy();
         }
+        else{
+            hitSound.play();
+        }
     }
 }
-

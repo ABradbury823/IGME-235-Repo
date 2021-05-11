@@ -20,7 +20,7 @@ let stage;
 
 // game variables
 let startScene;
-let gameScene, levelText, goldText, track, goldRate, spawnTroop;
+let gameScene, levelText, goldText, track, goldRate, spawnTroopButton, shootSound, destroySound, moneySound, hitSound, clickSound;
 let gameOverScene;
 
 let trackNodes = [];
@@ -35,7 +35,7 @@ let selecting = false;
 
 function setup() {
 	stage = app.stage;
-	app.renderer.backgroundColor = 0x13871f;
+	app.renderer.backgroundColor = 0x8F8F8F;
 	// #1 - Create the `start` scene
 	startScene = new PIXI.Container();
 	stage.addChild(startScene);
@@ -70,7 +70,28 @@ function setup() {
 	track.draw();
 	
 	// #6 - Load Sounds
+	shootSound = new Howl({
+		src: ["media/sounds/projectile.wav"]
+	});
+
+	destroySound = new Howl({
+		src: ["media/sounds/breaking.wav"]
+	});
 	
+	moneySound = new Howl({
+		src: ["media/sounds/money-collect.wav"],
+		volume: .5
+	});
+
+	hitSound = new Howl({
+		src: ["media/sounds/hit.wav"],
+		volume: .25
+	});
+
+	clickSound = new Howl({
+		src: ["media/sounds/click.wav"],
+		volume: .15
+	});
 	// #7 - Load sprite sheet
 		
 }
@@ -82,7 +103,7 @@ function createButtonsAndLabels(){
 	let startAndGameOverStyle = new PIXI.TextStyle({
 		fill: 0xFFFFFF,
 		fontSize: 60,
-		fontFamily: 'Comic Sans',
+		fontFamily: 'Times New Roman',
 		stroke: 0x222222,
 		strokeThickness: 5
 	});
@@ -111,7 +132,7 @@ function createButtonsAndLabels(){
 	let gameTextStyle = new PIXI.TextStyle({
 		fill: 0xFFFFFF,
 		fontSize: 20,
-		fontFamily: 'Comic Sans',
+		fontFamily: 'Times New Roman',
 		stroke: 0x222222,
 		strokeThickness: 3
 	});
@@ -144,16 +165,17 @@ function createButtonsAndLabels(){
 	endGameButton.on("pointerout", e=>{e.currentTarget.alpha = 1;});
 	gameScene.addChild(endGameButton);
 
-	spawnTroop = new PIXI.Text("Spawn Troop");
-	spawnTroop.style = gameTextStyle;
-	spawnTroop.x = 5;
-	spawnTroop.y = 100;
-	spawnTroop.interactive = true;
-	spawnTroop.buttonMode = true;
-	spawnTroop.on("pointerup", addTroop);
-	spawnTroop.on("pointerover", e=>{e.target.alpha = .7;});
-	spawnTroop.on("pointerout", e=>{e.currentTarget.alpha = 1;});
-	gameScene.addChild(spawnTroop);
+	//spawn troop button
+	spawnTroopButton = new PIXI.Text("Spawn Troop");
+	spawnTroopButton.style = gameTextStyle;
+	spawnTroopButton.x = 5;
+	spawnTroopButton.y = 100;
+	spawnTroopButton.interactive = true;
+	spawnTroopButton.buttonMode = true;
+	spawnTroopButton.on("pointerup", addTroop);
+	spawnTroopButton.on("pointerover", e=>{e.target.alpha = .7;});
+	spawnTroopButton.on("pointerout", e=>{e.currentTarget.alpha = 1;});
+	gameScene.addChild(spawnTroopButton);
 
 	//**game over scene**
 	//game over text
@@ -182,6 +204,8 @@ function startGame(){
 	startScene.visible = false;
 	gameOverScene.visible = false;
 	gameScene.visible = true;
+	app.renderer.backgroundColor = 0x13871f;
+	clickSound.play();
 
 	//more when levels, player, and enemies are built
 	levelNum = 1;
@@ -211,6 +235,7 @@ function gameOver(){
 	startScene.visible = false;
 	gameScene.visible = false;
 	gameOverScene.visible = true;
+	app.renderer.backgroundColor = 0x8F8F8F;
 
 	app.ticker.remove(update);
 
@@ -241,6 +266,7 @@ function gameOver(){
 function addTroop(){
 	if(gold >= 50){
 		changeGoldAmount(-50);
+		moneySound.play();
 		let troop = new Troop(trackNodes[0].x, trackNodes[0].y, 30, 10, 10, 3);
 		troops.push(troop);
 		gameScene.addChild(troops[troops.length - 1]);
@@ -279,8 +305,8 @@ function update(){
 
 	//player can't buy troops if they don't have funds
 	if(gold < 50){
-		spawnTroop.interactive = false;
-		spawnTroop.alpha = .7;
+		spawnTroopButton.interactive = false;
+		spawnTroopButton.alpha = .7;
 
 		if(troops.length == 0){
 			gameOver();
@@ -288,8 +314,8 @@ function update(){
 		}
 	}
 	else{
-		spawnTroop.interactive = true;
-		spawnTroop.alpha = 1.0;
+		spawnTroopButton.interactive = true;
+		spawnTroopButton.alpha = 1.0;
 	}
 
 	for(let i = 0; i < troops.length; i++){
@@ -312,11 +338,12 @@ function update(){
 				enemies[j].shotTimer -= deltaTime;
 			}
 
-			//keep tracking your target unless if it dies
+			//keep tracking and shooting your target unless if it dies
 			if(enemies[j].target != null && Vector2.distance(enemies[j].target.position, enemies[j].position) <= enemies[j].radius){
 				if(enemies[j].shotTimer <= 0){
 					enemies[j].shotTimer = enemies[j].fireSpeed;
 					enemies[j].shoot(deltaTime);
+					shootSound.play();
 				}
 
 				if(!enemies[j].target.isAlive){
