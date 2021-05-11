@@ -15,6 +15,8 @@ body{
 h1{
     margin-top: 0; 
     margin-bottom: 0;
+    padding-bottom: .5rem;
+    border-bottom: dotted 1px rgb(77, 77, 77);
 }
 
 h2~p, #mockups{
@@ -41,3 +43,27 @@ label{
 }
 
 img{width: 500px;}
+
+.links{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: .5rem 0
+}
+
+a{
+    text-decoration: none;
+    border: solid 1px rgb(77, 77, 77);
+    background-color: #8f8f8f;
+    border-radius: 10px;
+    padding: .5rem;
+    text-align: center;
+    color: white;
+}
+
+a:link{color: white}
+a:visited{color: white;}
+a:focus{text-decoration: underline;}
+a:hover{text-decoration: underline;}
+a:active{text-decoration: underline; background-color: #adadad;}

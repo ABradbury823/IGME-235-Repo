@@ -166,7 +166,7 @@ function createButtonsAndLabels(){
 	gameScene.addChild(endGameButton);
 
 	//spawn troop button
-	spawnTroopButton = new PIXI.Text("Spawn Troop");
+	spawnTroopButton = new PIXI.Text("Spawn Basic Troop \n(-50 Gold)");
 	spawnTroopButton.style = gameTextStyle;
 	spawnTroopButton.x = 5;
 	spawnTroopButton.y = 100;
