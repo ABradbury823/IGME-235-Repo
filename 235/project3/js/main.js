@@ -224,6 +224,13 @@ function startGame(){
 	gameOverScene.visible = false;
 	gameScene.visible = true;
 	victoryScene.visible = false;
+
+	if(lose || victory){
+		generateLevels();
+	}
+
+	victory = false;
+	lose = false;
 	app.renderer.backgroundColor = 0x13871f;
 	clickSound.play();
 
@@ -240,6 +247,7 @@ function gameOver(){
 	gameScene.visible = false;
 	gameOverScene.visible = true;
 	victoryScene.visible = false;
+	lose = true;
 
 	app.renderer.backgroundColor = 0x8F8F8F;
 	app.ticker.remove(update);
@@ -287,11 +295,17 @@ function cleanScene(){
 		barricade.destroy();
 	}
 
-	if(lose){
+	if(lose || victory){
 		paused = true;
 		selecting = true;
 		changeGoldAmount(-gold);
 		goldRate = 0;
+
+		//remove levels
+		for(let i = 0; i < levels.length; i++){
+			levels.pop();
+			i--;
+		}
 	}
 
 	killAll(bullets);
@@ -372,7 +386,6 @@ function update(){
 		spawnTroopButton.alpha = .5;
 
 		if(troops.length == 0){
-			lose = true;
 			gameOver();
 			return;
 		}
