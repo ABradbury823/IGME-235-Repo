@@ -15,7 +15,7 @@ header #title{
     text-align: center;
 }
 
-header, nav#top, footer{
+header, nav#top{
     background: black;
     color: white;
     padding: .25rem 0;
@@ -56,9 +56,9 @@ ul.navbar{
 
 .navbar a:link{color: #ffffff;}
 .navbar a:visited{color:#ffffff;}
-.navbar a:focus{background: #575757;}
-.navbar a:hover{background: #575757;}
-.navbar a:active{background: #575757;}
+.navbar a:focus{background: #575757; color: rgb(255, 255, 93);}
+.navbar a:hover{background: #575757; color: rgb(255, 255, 93);}
+.navbar a:active{background: #575757; color: rgb(255, 255, 93);}
 
 main{margin: 0 10%;}
 
@@ -79,6 +79,7 @@ h3{margin-bottom: .5rem;}
 h3 a{
     text-decoration: none;
     font-size: 1.5rem;
+    font-style: italic;
 }
 
 h3 a:link, #contact a:link{color: black;}
@@ -93,17 +94,21 @@ section{
 }
 
 .project{
-    margin: 2rem 0;
+    margin: 1rem 0 2rem 0;
     display: flex;
     flex-direction: column;
 }
 
 .project-image{
-    max-width: 650px;
+    max-width: 620px;
     height: auto;
+    border: solid 2px black;
 }
 
-.project-description{margin: 1rem 0;}
+.project-description{
+    margin: 1rem 0;
+    line-height: 1.5rem;
+}
 
 @media screen and (min-width: 1200px)
 {
@@ -159,6 +164,7 @@ section#bio{
     grid-area: about-me;
     margin-top: 0;
     margin-right: 1rem;
+    line-height: 1.5rem;
 }
 
 #bio-image{
@@ -221,8 +227,4 @@ section#bio{
         margin: 1rem 0;
         padding: 1rem 0;
     }
-}
-
-footer{
-    margin-top: 1rem;
 }
