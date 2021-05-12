@@ -235,6 +235,7 @@ class Barricade extends PIXI.Graphics{
         this.health = 100;
         this.maxHealth = 100;
         this.isAlive = true;
+        this.destroyed = false;
 
         this.beginFill(0xAAAAAA);
         this.drawRect(0, 0, this.size.x, this.size.y);
@@ -261,10 +262,12 @@ class Barricade extends PIXI.Graphics{
         gameScene.removeChild(this.healthBarRed);
         gameScene.removeChild(this.healthBarGreen);
 
-        if(this.health <= 0){
+        //don't give player money when scene is cleared
+        if(this.health <= 0 && !this.destroyed){
             changeGoldAmount(100);
             destroySound.play();
             moneySound.play();
+            this.destroyed = true;
         }
     }
 

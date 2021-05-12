@@ -20,7 +20,7 @@ let stage;
 
 // game variables
 let startScene;
-let gameScene, levelText, goldText, track, goldRate, spawnTroopButton, shootSound, destroySound, moneySound, hitSound, clickSound;
+let gameScene, levelText, goldText, goldRate, spawnTroopButton, shootSound, destroySound, moneySound, hitSound, clickSound;
 let gameOverScene;
 let victoryScene;
 
@@ -33,6 +33,7 @@ let gold = 0;
 let paused = true;
 let selecting = false;
 let victory = false;
+let lose = false;
 let level1, level2, level3;
 let levels = [];
 let level = null;
@@ -227,7 +228,7 @@ function startGame(){
 	clickSound.play();
 
 	changeGoldAmount(100);
-	changeLevelTo(2);
+	changeLevelTo(1);
 
 	app.ticker.add(update);
 }
@@ -270,18 +271,28 @@ function cleanScene(){
 		i--;
 	}
 
-	gameScene.removeChild(barricade);
+	//clear track
+	if(level){
+		for(let i = 0; i < level.track.trackLines.length; i++){
+			gameScene.removeChild(level.track.trackLines[i]);
+		}
+	}
+
+	if(barricade){
+		gameScene.removeChild(barricade);
+	}
 
 	//no need to destroy if player has already won
-	if(!victory){
+	if(!victory && barricade){
 		barricade.destroy();
 	}
 
-	paused = true;
-	selecting = true;
-	changeGoldAmount(-gold);
-	changeLevelTo(1);
-	goldRate = 0;
+	if(lose){
+		paused = true;
+		selecting = true;
+		changeGoldAmount(-gold);
+		goldRate = 0;
+	}
 
 	killAll(bullets);
 	killAll(troops);
@@ -304,14 +315,17 @@ function addBasicTroop(){
 //PURPOSE: Change the level the player is currently on
 //ARGUMENTS: Level to change to
 function changeLevelTo(num){
+	//need this conditional protect javascript from itself *facepalm*
 	if(num <= levels.length){
-		level = levels[num];
+		cleanScene()
+
+		level = levels[num - 1];
 		levelNum = level.id;
 		goldRate = level._goldRate
 		paused = false;
 		selecting = true;
 
-		level._track.draw();
+		level.track.draw();
 
 		//make enemy towers
 		for(let i = 0; i < level._enemies.length; i++){
@@ -358,6 +372,7 @@ function update(){
 		spawnTroopButton.alpha = .5;
 
 		if(troops.length == 0){
+			lose = true;
 			gameOver();
 			return;
 		}
@@ -372,6 +387,10 @@ function update(){
 				victory = true;
 				win();
 				return;
+			}
+			else{
+				changeLevelTo(level.id + 1);
+				break;
 			}
 		}
 		
@@ -459,6 +478,8 @@ function killAll(objList){
 	}
 }
 
+//PURPOSE: Generates all of the level objects
+//ARGUMENTS: --
 function generateLevels(){
 	level1 = {
 		id: 1,
@@ -466,12 +487,12 @@ function generateLevels(){
 			new TrackNode(400, 610),            //start
 			new TrackNode(400, -10)             //end
 		],
-		_track: null,
+		track: null,
 		_barricade: null,
 		_enemies: [new Enemy(350, 300, 100)],
 		_goldRate: 1 / 20
 	};
-	level1._track = new Track(level1.trackNodes);
+	level1.track = new Track(level1.trackNodes);
 	level1._barricade = new Barricade(level1.trackNodes[level1.trackNodes.length - 1].x);
 	levels.push(level1);
 
@@ -483,12 +504,12 @@ function generateLevels(){
 			new TrackNode(600, 300, 0, -1),
 			new TrackNode(600, -10)             //end
 		],
-		_track: null,
+		track: null,
 		_barricade: null,
 		_enemies: [new Enemy(500, 230, 150)],
 		_goldRate: 1 / 20
 	};
-	level2._track = new Track(level2.trackNodes);
+	level2.track = new Track(level2.trackNodes);
 	level2._barricade = new Barricade(level2.trackNodes[level2.trackNodes.length - 1].x);
 	levels.push(level2);
 
@@ -502,12 +523,12 @@ function generateLevels(){
 			new TrackNode(300, 200, 0, -1),
 			new TrackNode(300, -10)             //end
 		],
-		_track: null,
+		track: null,
 		_barricade: null,
 		_enemies: [new Enemy(400, 300, 175)],
 		_goldRate: 1 / 20
 	}
-	level3._track = new Track(level3.trackNodes);
+	level3.track = new Track(level3.trackNodes);
 	level3._barricade = new Barricade(level3.trackNodes[level3.trackNodes.length - 1].x);
 	levels.push(level3);
 }
