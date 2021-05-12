@@ -10,7 +10,12 @@ const WIDTH = app.view.width;
 const HEIGHT = app.view.height;	
 
 // pre-load the images
-app.loader.add([""]);
+app.loader.add([
+	"media/sprites/knight.png",
+	"media/sprites/tower.png",
+	"media/sprites/wall.png",
+	"media/sprites/bullet.png"
+]);
 app.loader.onProgress.add(e => { console.log(`progress=${e.progress}`) });
 app.loader.onComplete.add(setup);
 app.loader.load();
@@ -174,9 +179,9 @@ function createButtonsAndLabels(){
 
 	//**game over scene**
 	//game over text
-	let gameOverText = new PIXI.Text("Game Over");
+	let gameOverText = new PIXI.Text("You ran out of gold!");
 	gameOverText.style = placeHolderStyle;
-	gameOverText.x = 250;
+	gameOverText.x = 150;
 	gameOverText.y = 200;
 	gameOverScene.addChild(gameOverText);
 	
@@ -194,9 +199,9 @@ function createButtonsAndLabels(){
 
 	//**victory screen **
 	//victory text
-	let winText = new PIXI.Text("You Win!");
+	let winText = new PIXI.Text("The castle has been sieged!");
 	winText.style = placeHolderStyle;
-	winText.x = 280;
+	winText.x = 75;
 	winText.y = 200;
 	victoryScene.addChild(winText);
 
@@ -231,7 +236,6 @@ function startGame(){
 
 	victory = false;
 	lose = false;
-	app.renderer.backgroundColor = 0x13871f;
 	clickSound.play();
 
 	changeGoldAmount(100);
@@ -274,6 +278,7 @@ function win(){
 function cleanScene(){
 	//clean out scene
 	for(let i = 0; i < enemies.length; i++){
+		gameScene.removeChild(enemies[i].detectRadius);
 		gameScene.removeChild(enemies[i]);
 		enemies.shift();
 		i--;
@@ -345,6 +350,7 @@ function changeLevelTo(num){
 		for(let i = 0; i < level._enemies.length; i++){
 			let enemy = level._enemies[i];
 			enemies.push(enemy);
+			gameScene.addChild(enemy.detectRadius);
 			gameScene.addChild(enemy);
 		}
 

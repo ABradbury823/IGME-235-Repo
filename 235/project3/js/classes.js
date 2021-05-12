@@ -45,11 +45,13 @@ class Track{
 
 //PURPOSE: Troop class that represents one of the player's basic troops
 //CONSTRUCTOR: X and Y position, how fast troop moves, maximum health, damage dealt to barricade, attack speed
-class Troop extends PIXI.Graphics{
-    constructor(x, y, speed = 25, health = 10, damage = 10, attackSpeed = 3){
-        super();
+class Troop extends PIXI.Sprite{
+    constructor(x, y, speed = 25, health = 5, damage = 10, attackSpeed = 3){
+        super(app.loader.resources["media/sprites/knight.png"].texture);
         this.size = 20;
-        this.position = new Vector2(x - this.size / 2, y - this.size / 2);
+        this.anchor.set(.5, .5);
+        this.scale.set(2);
+        this.position = new Vector2(x, y);
         this.speed = speed;
         this.target = level.trackNodes[1];
         this.direction = level.trackNodes[0].direction;
@@ -62,23 +64,19 @@ class Troop extends PIXI.Graphics{
         this.damage = damage;
         this.attackSpeed = attackSpeed;
         this.attackTimer = attackSpeed;
-
-        this.beginFill(0xFFFF00);
-        this.drawRect(0, 0, this.size, this.size);
-        this.endFill();
-
+        
         //health bar (red)
         this.healthBarRed = new PIXI.Graphics();
         this.healthBarRed.beginFill(0xFF0000);
         this.healthBarRed.lineStyle(1, 0xFFFFFF);
-        this.healthBarRed.drawRect(0, this.size / 2, this.size, 5)
+        this.healthBarRed.drawRect(-this.width / 2, -5, this.width, 5);
         this.healthBarRed.endFill();
         gameScene.addChild(this.healthBarRed);
 
         //health bar(green)
         this.healthBarGreen = new PIXI.Graphics();
         this.healthBarGreen.beginFill(0x00FF00);
-        this.healthBarGreen.drawRect(0, this.size / 2, this.size, 5)
+        this.healthBarGreen.drawRect(-this.width / 2, -5, this.width, 5);
         this.healthBarGreen.endFill();
         gameScene.addChild(this.healthBarGreen);
     }
@@ -120,7 +118,7 @@ class Troop extends PIXI.Graphics{
     }
 
     decreaseHealth(amount){
-        this.healthBarGreen.width -= (amount / this.maxHealth) * this.size;
+        this.healthBarGreen.width -= (amount / this.maxHealth) * this.width;
         this.health -= amount;
         if(this.health <= 0){
             this.isAlive = false;
@@ -141,11 +139,13 @@ class Troop extends PIXI.Graphics{
 
 //PURPOSE: Enemy class that shoots at the player's troops
 //CONSTRUCTOR: X and Y position, detection radius of enemy, firing speed of enemy
-class Enemy extends PIXI.Graphics{
-    constructor(x, y, radius, firingSpeed = 4){
-        super();
+class Enemy extends PIXI.Sprite{
+    constructor(x, y, radius, firingSpeed = 3){
+        super(app.loader.resources["media/sprites/tower.png"].texture);
         this.size = 20;
-        this.position = new Vector2(x - this.size / 2, y - this.size / 2);
+        this.anchor.set(.5, .5);
+        this.scale.set(1.5);
+        this.position = new Vector2(x, y);
         this.radius = radius;
         this.target = null;
         this.pivot.x = this.size / 2;
@@ -156,15 +156,13 @@ class Enemy extends PIXI.Graphics{
         this.damage = 1;
 
         //radius circle
-        this.beginFill(0x00FFFF, .3);
-        this.drawCircle(this.size / 2, this.size / 2, this.radius, .5);
-        this.endFill();
-
-        this.beginFill(0xFF0000);
-        this.drawRect(0, 0, this.size, this.size);
-        this.endFill();
+        this.detectRadius = new PIXI.Graphics();
+        this.detectRadius.beginFill(0x00FFFF, .3);
+        this.detectRadius.drawCircle(this.position.x - this.width / 2, this.position.y, this.radius, .5);
+        this.detectRadius.endFill();
     }
 
+    //unused
     followTarget(dt){
         let towerToTarget = Vector2.subtract(this.target.position, this.position);
         let angle = Vector2.dot(this.direction, towerToTarget);
@@ -174,7 +172,7 @@ class Enemy extends PIXI.Graphics{
     }
 
     shoot(dt){
-        let targetPos = Vector2.add(this.target.position, (new Vector2(this.target.size, this.target.size)));
+        let targetPos = Vector2.add(this.target.position, (new Vector2()));
         let targetVelocity = Vector2.multiply(this.target.direction, this.target.speed).multiply(dt);
         let bulletDirection = Vector2.subtract(targetPos, this.position);
         bulletDirection = bulletDirection.add(targetVelocity) //add targets velocity for better aim
@@ -185,24 +183,26 @@ class Enemy extends PIXI.Graphics{
         gameScene.addChild(bullet);
         this.target.decreaseHealth(this.damage);
     }
+
+    drawRadius(){
+        gameScene.addChild(this.detectRadius);
+    }
 }
 
 //PURPOSE: Bullet that towers shoot
 //CONSTRUCTOR: X and Y positions, how fast the bullet moves, direction bullet will move in, how far bullet travels before disappearing
-class Bullet extends PIXI.Graphics{
+class Bullet extends PIXI.Sprite{
     constructor(x, y, speed, direction, distance){
-        super();
+        super(app.loader.resources["media/sprites/bullet.png"].texture);
         this.size = 5;
-        this.position = new Vector2(x - this.size / 2, y - this.size / 2);
-        this.start = new Vector2(x - this.size / 2, y - this.size / 2);
+        this.anchor.set(.5, .5);
+        this.scale.set(1.5);
+        this.position = new Vector2(x, y);
+        this.start = new Vector2(x, y);
         this.speed = speed;
         this.direction = direction;
         this.isAlive = true;
         this.distance = distance;
-
-        this.beginFill(0xFFFFFF);
-        this.drawRect(0, 0, this.size, this.size);
-        this.endFill();
     }
 
     move(dt){
@@ -221,9 +221,9 @@ class Bullet extends PIXI.Graphics{
 
 //PURPOSE: Barricade class that has hit points, cannot attack, and marks the end of the level if destroyed
 //CONSTRUCTOR: X and Y position of the barricade, maximum health, is this a horizontal barricade
-class Barricade extends PIXI.Graphics{
+class Barricade extends PIXI.Sprite{
     constructor(x, y = 0, isHorizontal = true){
-        super();
+        super(app.loader.resources["media/sprites/wall.png"].texture);
         if(isHorizontal){
             this.size = new Vector2(100, 50);
         }
@@ -231,28 +231,26 @@ class Barricade extends PIXI.Graphics{
             this.size = new Vector2(50, 100);
         }
 
-        this.position = new Vector2(x - this.size.x / 2, y - this.size.y / 2);
+        this.anchor.set(.5, .5);
+        this.scale.set(2);
+        this.position = new Vector2(x, y);
         this.health = 100;
         this.maxHealth = 100;
         this.isAlive = true;
         this.destroyed = false;
 
-        this.beginFill(0xAAAAAA);
-        this.drawRect(0, 0, this.size.x, this.size.y);
-        this.endFill();
-
         //health bar (red)
         this.healthBarRed = new PIXI.Graphics();
         this.healthBarRed.beginFill(0xFF0000);
         this.healthBarRed.lineStyle(1, 0xFFFFFF);
-        this.healthBarRed.drawRect(0, this.size.y / 4 - 5, this.size.x, 5)
+        this.healthBarRed.drawRect(-this.width / 2, this.size.y / 4 - 5, this.size.x, 5)
         this.healthBarRed.endFill();
         this.healthBarRed.x = this.position.x + this.size.x + 5;
 
         //health bar(green)
         this.healthBarGreen = new PIXI.Graphics();
         this.healthBarGreen.beginFill(0x00FF00);
-        this.healthBarGreen.drawRect(0, this.size.y / 4 - 5, this.size.x, 5)
+        this.healthBarGreen.drawRect(-this.width / 2, this.size.y / 4 - 5, this.size.x, 5)
         this.healthBarGreen.endFill();
         this.healthBarGreen.x = this.position.x + this.size.x + 5;
     }
