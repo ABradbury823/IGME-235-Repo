@@ -154,16 +154,16 @@ function createButtonsAndLabels(){
 	changeGoldAmount(0);
 
 	//end game button (debugging)
-	let endGameButton = new PIXI.Text("End Game");
-	endGameButton.style = gameTextStyle;
-	endGameButton.x = WIDTH - 100;
-	endGameButton.y = 15;
-	endGameButton.interactive = true;
-	endGameButton.buttonMode = true;
-	endGameButton.on("pointerup", gameOver);
-	endGameButton.on("pointerover", e=>{e.target.alpha = .7;});
-	endGameButton.on("pointerout", e=>{e.currentTarget.alpha = 1;});
-	gameScene.addChild(endGameButton);
+	// let endGameButton = new PIXI.Text("End Game");
+	// endGameButton.style = gameTextStyle;
+	// endGameButton.x = WIDTH - 100;
+	// endGameButton.y = 15;
+	// endGameButton.interactive = true;
+	// endGameButton.buttonMode = true;
+	// endGameButton.on("pointerup", gameOver);
+	// endGameButton.on("pointerover", e=>{e.target.alpha = .7;});
+	// endGameButton.on("pointerout", e=>{e.currentTarget.alpha = 1;});
+	// gameScene.addChild(endGameButton);
 
 	//spawn troop button
 	spawnTroopButton = new PIXI.Text("Spawn Basic Troop \n(-50 Gold)");
