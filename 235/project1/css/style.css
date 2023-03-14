@@ -25,6 +25,7 @@ nav#top{
     position: sticky;
     top: 0;
     border-bottom: solid 3px rgb(221, 1, 1);
+    z-index: 2;
 }   
 
 ul.navbar{
@@ -74,7 +75,11 @@ blockquote{
 
 h2{font-size: 2em;}
 
-h3{margin-bottom: .5rem;}
+h3{
+    margin-bottom: .5rem;
+    text-decoration: underline;
+    align-self: flex-start;
+}
 
 h3 a{
     text-decoration: none;
@@ -91,6 +96,15 @@ h3 a:active, #contact a:active{color: black; text-decoration: underline; border:
 section{
     border-bottom: solid 1px #575757;
     padding-bottom: .5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section.projects{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .project{
@@ -120,6 +134,7 @@ section{
 #resume{
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
 }
 
 #resume i{

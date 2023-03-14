@@ -6,6 +6,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lexend&family=Merriweather&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/slider.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" 
     integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous">
     <title>Andrew Bradbury's Game Dev Portfolio</title>
@@ -24,9 +25,9 @@
     </nav>
 
     <main>
-        <section id="tagline">
+        <!--<section id="tagline">
             <blockquote>Tackling challenges head-on with a level head</blockquote>
-        </section>
+        </section> -->
         
         <!--Empty div for nav links-->
         <div id="projects"></div>
@@ -34,27 +35,73 @@
         <h2>Projects</h2>
     
         <section id="projects">
-            <h3><a href="https://itch.io/jam/rgdc-game-pajama-party/rate/854470">Lucid</a></h3>
+            <h3><a href="https://violentvioiet.itch.io/personal-eyes">Personal Eyes</a></h3>
+
+            <!--Dynamic image slider-->
+            <section class="container">
+                <div class="slider-wrapper">
+                    <div class="slider">
+                        <img id="slide1" src="media/personal-eyes.PNG" alt="Title screen of Personal Eyes">
+
+                        <!--PLACEHOLDER IMAGE-->
+                        <img id="slide2" src="media/cropbuster.jpg" alt="">
+                        
+                        <!--PLACEHOLDER IMAGE-->
+                        <img id="slide3" src="media/siege-the-castle.PNG" alt="">
+                    </div>
+                    <div class="slider-nav">
+                        <a href="#slide1"></a>
+                        <a href="#slide2"></a>
+                        <a href="#slide3"></a>
+                    </div>
+                </div>
+            </section>
+
             <div class="project" id="first-project">
-                <img src="media/lucid.PNG" alt="Lucid, a Game Jam game" class="project-image">
-                <p class="project-description">
-                    <i>Lucid</i> was made as part of a 48-hour game jam in December 2020 using the Unity game engine. <i>Lucid</i> 
-                    is a puzzle platformer game where the player can summon in boxes to help them solve various puzzles. I was 
-                    mostly involved with the player's movement script, sound effects, and particle systems. My largest contribution
-                    to the game was assisting my teammates with learning Unity, C#, and GitHub version control.
-                </p>
+                <img src="media/personal-eyes.PNG" alt="My former full-time Unity project, Personal Eyes" class="project-image">
+                <!-- <p class="project-description">
+                    <i>Personal Eyes</i> is a 3D survival horror game made in Unity3D that I developed with a team of fellow students from June 2021 until 
+                    May 2022. The gameplay primarily revolves around the premise of gaining access to a third person camera as a resource rather than a feature. 
+                    My work on the project involved creating 3D environment models and textures, inspired by PS2-era graphics from titles like 
+                    <i>Fatal Frame</i> and the earlier <i>Resident Evil</i> games. My workflow included collaborating with the creative lead, 
+                    concept artist, and other 3D artists to make sure a cohesive artstyle was maintained. As a part of RIT's MAGIC Maker program, I 
+                    worked full-time developing the game, attending weekly team stand-ups as well as triweekly stand-ups with 
+                    Rockstar Games to gather feedback from industry professionals. We published a demo that includes our first level to 
+                    <a href="https://violentvioiet.itch.io/personal-eyes">itch.io</a> in May 2022.
+                </p> -->
             </div>
 
-            <h3><a href="https://people.rit.edu/amb7316/235/project3/game.html">Siege the Castle</a></h3>
+            <h3><a href="https://dinowolf10.itch.io/atoll-tale">Atoll Tale</a></h3>
             <div class="project" id="second-project">
-                <img src="media/siege-the-castle.PNG" alt="My web browser game, Siege the Castle" class="project-image">
-                <p class="project-description">
-                    <i>Siege the Castle</i> is a web browser game I made as the final for my Intro to Game Web Tech class in May 2021.
-                    The game uses the PixiJS JavaScript library to render graphics to the screen and ES6 classes to represent in-game 
-                    objects. <i>Siege the Castle</i> is a "reverse tower defense" game, in the sense that instead of placing down towers
-                    to defend against waves of ballons, zombies, etc., the player is the one sending troops down the track in order to 
-                    reach the end and as the name suggests, siege the castle. 
-                </p>
+                <img src="media/atoll-tale.png" alt="Atoll Tale, a semester-long game project" class="project-image">
+                <!-- <p class="project-description">
+                    <i>Atoll Tale</i> is a 3D puzzle-platformer I worked on from August to December 2022 with a team of student developers.
+                    The player controls Lula, a pirate who found herself shipwrecked on a series of islands in the middle of the ocean.
+                    Equipped with nothing but a trusty shovel, the player must navigate the circular levels and dig up as much treasure 
+                    as they can find in order to repair their ship. I acted as the team lead for this project as well as the team's artist, making
+                    both 2D and 3D assets. As the team lead, I handled the Trello board for task management, scheduled team meetings, and 
+                    made the final say on creative decisions. My artwork got me involved in character modeling for the player
+                    and the enemy, environment assets, texture shaders, and UI elements. Inspired by whimisical Nintendo games such
+                    as <i>Captain Toad: Treasure Tracker</i> and <i>The Legend of Zelda: Link's Awakening</i>, <i>Atoll Tale</i> has a highly-
+                    stylized artstyle, providing several unique and fun challenges for a first-time project lead. A demo that includes the first
+                    level has been uploaded to <a href="https://dinowolf10.itch.io/atoll-tale">itch.io</a>.
+                </p> -->
+            </div>
+
+            <h3><a href="https://people.rit.edu/amb7316/330/falling-hand/home.html">Falling Hand</a></h3>
+            <div class="project" id="third-project">
+                <img src="media/falling-hand.png" alt="A JavaScript web application, Falling Hand" class="project-image">
+                <!-- <p class="project-description">
+                    <i>Falling Hand</i> is a web application I developed with a partner from November to December 2022. The game 
+                    is a simple falling sand simulator with a twist: by using the device's camera, the player can control where 
+                    particles are dropped in the scene. The application uses the HTML Canvas element for drawing visuals,
+                    ml5 PoseNet Machine Learning for tracking hand motions, and Bulma for styling. For this project, I was responsible for the 
+                    falling sand portion of the game as well as the controls. I used ES6 classes to make a grid that draws and controls a
+                    typed array of particles that can be one of three types: sand, water, and stone. Combined with the hotkeys on the mouse, 
+                    the controls allow for a great deal of customization to the experience, even allowing the user to use their mouse if
+                    they don't have a working camera. The website can be found <a href="https://people.rit.edu/amb7316/330/falling-hand/home.html">
+                    here</a> if you'd like to try it out!
+                </p> -->
             </div>
 
             <!-- <h3><a href="">Project 3</a></h3>
@@ -77,11 +124,6 @@
         <h2>Documents</h2>
     
         <section id="resume">
-            <!--This is a temporary link, will be removed after project is done-->
-            <p>
-                <i class="far fa-file-pdf"></i><a href="media/project-1-documentation.pdf">View documentation as a PDF</a>
-            </p>
-
             <p>
             <i class="far fa-file-pdf"></i><a href="media/Andrew-Bradbury-Resume.pdf">View resume as a PDF</a>
             </p>
