@@ -3,6 +3,7 @@ template.innerHTML = `
 <style>
     .container {
         padding: 2rem;
+        border-bottom: solid 1px #575757;
     }
 
     .slider-wrapper {
@@ -20,6 +21,7 @@ template.innerHTML = `
         scroll-behavior: smooth;
         box-shadow: 0 1.5rem 3rem -.75rem hsla(0, 0, 0, .25);
         border-radius: 1rem;
+        user-select: none;
     }
 
     .slider img {
@@ -73,6 +75,7 @@ template.innerHTML = `
         line-height: 3rem;
         font-size: 1.5rem;
         color: #353535;
+        user-select: none;
     }
 
     .left-arrow:hover, .right-arrow:hover {
@@ -82,20 +85,10 @@ template.innerHTML = `
 <section class="container">
     <div class="slider-wrapper">
         <div class="slider">
-            <!-- List of images --!>
-            <img id="slide1" src="media/personal-eyes.PNG" alt="Title screen of Personal Eyes">
-
-            <!--PLACEHOLDER IMAGE-->
-            <img id="slide2" src="media/cropbuster.jpg" alt="">
-                        
-            <!--PLACEHOLDER IMAGE-->
-            <img id="slide3" src="media/siege-the-castle.PNG" alt="">
+            <!-- List of images go here --!>
         </div>
         <div class="slider-nav">
             <!-- Slider dots to show location --!>
-            <span class="slider-dot"></span>
-            <span class="slider-dot"></span>
-            <span class="slider-dot"></span>
         </div>
         <div class="slider-arrows">
             <span class="left-arrow">&lt;</span>
@@ -121,33 +114,46 @@ class ImageSlider extends HTMLElement {
         this.slider = this.shadowRoot.querySelector(".slider");
         this.sliderNav = this.shadowRoot.querySelector(".slider-nav");
 
-        this.images = this.dataset.images.split(",") ?? [];
-        console.log(this.images)
-
+        this.imageData = this.dataset.images.split(",") ?? [];
+        this.images = [];
+        
         //go through images and make image and slider dot
         //format: src,alt,src,alt,etc.
-        for (let i = 0; i < this.images.length; i += 2) {
+        for (let i = 0; i < this.imageData.length; i += 2) {
             let newImg = document.createElement("img");
-            newImg.id = `slide${i+1}`;
-            newImg.src = this.images[i];
-            newImg.alt = this.images[i+1];
-
+            newImg.id = `slide${i/2 + 1}`;
+            newImg.src = this.imageData[i];
+            newImg.alt = this.imageData[i+1];
+            this.images.push(newImg);
+            
             let newDot = document.createElement("span");
             newDot.classList.add("slider-dot");
-
+            
             this.slider.appendChild(newImg);
             this.sliderNav.appendChild(newDot);
         }
-        this.currentImage = this.images[0] ?? null;
-        this.current = 0;
+        this.totalImages = this.images.length ?? 0;
+        console.log(this.imageData + ", " + this.totalImages);
+
+        this.currentImage = this.imageData[0] ?? null;
+        this.currentIndex = 0;
 
 
         //hooking up button events
-        const leftWrapper = e => this.changeImage(this.current - 1);
-        const rightWrapper = e => this.changeImage(this.current + 1);
+        const leftWrapper = e => this.changeImage(this.currentIndex - 1);
+        const rightWrapper = e => this.changeImage(this.currentIndex + 1);
 
         this.leftBtn.onclick = leftWrapper;
         this.rightBtn.onclick = rightWrapper;
+
+        //hooking up slider dots event
+        this.sliderDots = Array.from(this.shadowRoot.querySelectorAll(".slider-nav span"));
+        this.sliderDots[0].style = "opacity: 1;";
+        for(let i = 0; i < this.sliderDots.length; i++) {
+            const dotWrapper = e => this.changeImage(i);
+            this.sliderDots[i].onclick = dotWrapper;
+        }
+
         this.render();
     }
 
@@ -156,29 +162,31 @@ class ImageSlider extends HTMLElement {
         this.rightBtn.onclick = null;
     }
 
-    attributeChangedCallback(attributeName, oldVal, newVal) {
-        this.render();
-    }
-
-    static get observedAttributes(){
-
-    }
-
     render() {
+        for(let i = 0; i < this.totalImages; i++) {
+            //change opacity of appropriate slider dot
+            i == this.currentIndex ? this.sliderDots[i].style = "opacity: 1" : this.sliderDots[i].style = "opacity: .5";
 
+            //change image being displayed
+            i == this.currentIndex ? this.images[i].hidden = false : this.images[i].hidden = true; 
+        }
+        
     }
 
     changeImage(index) {
-        console.log("change image: " + index);
+        if(this.currentIndex == index) return;
 
-        let currentIndex = this.images.indexOf(this.currentImage);
-        currentIndex = index;
+        this.currentIndex = index;
 
         //sanitize index
-        if(currentIndex < 0) currentIndex = this.images.length - 1;
-        else if(currentIndex >= this.images.length) currentIndex = 0;
+        if(this.currentIndex < 0) this.currentIndex = this.totalImages - 1;
+        else if(this.currentIndex >= this.totalImages) this.currentIndex = 0;
 
-        //this.currentImage = 
+        console.log("change image to index " + this.currentIndex);
+
+        this.currentImage = this.images[this.currentIndex];
+
+        this.render();
     }
 
 
