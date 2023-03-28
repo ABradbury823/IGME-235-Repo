@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" 
     integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous">
-    <script src="js/image-slider.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
     <title>Andrew Bradbury's Game Dev Portfolio</title>
 </head>
 <body>
@@ -25,10 +25,6 @@
     </nav>
 
     <main>
-        <!--<section id="tagline">
-            <blockquote>Tackling challenges head-on with a level head</blockquote>
-        </section> -->
-        
         <!--Empty div for nav links-->
         <div id="projects"></div>
 
@@ -37,41 +33,16 @@
         <section id="projects">
             <!-- Personal Eyes Section -->
             <h3><a href="https://violentvioiet.itch.io/personal-eyes">Personal Eyes</a></h3>
-            
-            <!--Dynamic image slider-->
-            <!-- <section class="container">
-                <div class="slider-wrapper">
-                    <div class="slider">
-                        <img id="slide1" src="media/personal-eyes.PNG" alt="Title screen of Personal Eyes"> -->
-
-                        <!--PLACEHOLDER IMAGE-->
-                        <!-- <img id="slide2" src="media/cropbuster.jpg" alt=""> -->
-                        
-                        <!--PLACEHOLDER IMAGE-->
-                        <!-- <img id="slide3" src="media/siege-the-castle.PNG" alt=""> -->
-                    <!-- </div>
-                    <div class="slider-nav">
-                        <span class="slider-dot"></span>
-                        <span class="slider-dot"></span>
-                        <span class="slider-dot"></span>
-                    </div>
-                    <div class="slider-arrows">
-                        <span class="left-arrow">&lt;</span>
-                        <span class="right-arrow">&gt;</span>
-                    </div>
-                </div>
-            </section> -->
 
             <image-slider data-images=
                 "media/personal-eyes.PNG,Title screen of Personal Eyes,media/cropbuster.jpg,PLACEHOLDER,media/siege-the-castle.PNG,PLACEHOLDER"
             >
             </image-slider>
 
-            <!-- TODO: Make a drop down section to display more information -->
-            <div class="project" id="first-project" hidden>
+            <div class="project" id="first-project">
 
                 <!-- <img src="media/personal-eyes.PNG" alt="My former full-time Unity project, Personal Eyes" class="project-image"> -->
-                <!-- <p class="project-description">
+                <p class="project-description">
                     <i>Personal Eyes</i> is a 3D survival horror game made in Unity3D that I developed with a team of fellow students from June 2021 until 
                     May 2022. The gameplay primarily revolves around the premise of gaining access to a third person camera as a resource rather than a feature. 
                     My work on the project involved creating 3D environment models and textures, inspired by PS2-era graphics from titles like 
@@ -80,8 +51,9 @@
                     worked full-time developing the game, attending weekly team stand-ups as well as triweekly stand-ups with 
                     Rockstar Games to gather feedback from industry professionals. We published a demo that includes our first level to 
                     <a href="https://violentvioiet.itch.io/personal-eyes">itch.io</a> in May 2022.
-                </p> -->
+                </p>
             </div>
+            <button class="project-btn" id="btn1">Show More</button>
 
             <!-- Atoll Tale Section -->
             <h3><a href="https://dinowolf10.itch.io/atoll-tale">Atoll Tale</a></h3>
@@ -91,11 +63,10 @@
             >
             </image-slider>
 
-            <!-- TODO: Make a drop down section to display more information -->
             <div class="project" id="second-project">
-
+                
                 <!-- <img src="media/atoll-tale.png" alt="Atoll Tale, a semester-long game project" class="project-image"> -->
-                <!-- <p class="project-description">
+                <p class="project-description">
                     <i>Atoll Tale</i> is a 3D puzzle-platformer I worked on from August to December 2022 with a team of student developers.
                     The player controls Lula, a pirate who found herself shipwrecked on a series of islands in the middle of the ocean.
                     Equipped with nothing but a trusty shovel, the player must navigate the circular levels and dig up as much treasure 
@@ -106,9 +77,11 @@
                     as <i>Captain Toad: Treasure Tracker</i> and <i>The Legend of Zelda: Link's Awakening</i>, <i>Atoll Tale</i> has a highly-
                     stylized artstyle, providing several unique and fun challenges for a first-time project lead. A demo that includes the first
                     level has been uploaded to <a href="https://dinowolf10.itch.io/atoll-tale">itch.io</a>.
-                </p> -->
+                </p>
             </div>
+            <button class="project-btn" id="btn2">Show More</button>
 
+            <!-- Falling Hand Section -->
             <h3><a href="https://people.rit.edu/amb7316/330/falling-hand/home.html">Falling Hand</a></h3>
 
             <image-slider data-images=
@@ -116,10 +89,9 @@
             >
             </image-slider>
 
-            <!-- TODO: Make a drop down section to display more information -->
             <div class="project" id="third-project">
                 <!-- <img src="media/falling-hand.png" alt="A JavaScript web application, Falling Hand" class="project-image"> -->
-                <!-- <p class="project-description">
+                <p class="project-description">
                     <i>Falling Hand</i> is a web application I developed with a partner from November to December 2022. The game 
                     is a simple falling sand simulator with a twist: by using the device's camera, the player can control where 
                     particles are dropped in the scene. The application uses the HTML Canvas element for drawing visuals,
@@ -129,8 +101,9 @@
                     the controls allow for a great deal of customization to the experience, even allowing the user to use their mouse if
                     they don't have a working camera. The website can be found <a href="https://people.rit.edu/amb7316/330/falling-hand/home.html">
                     here</a> if you'd like to try it out!
-                </p> -->
+                </p>
             </div>
+            <button class="project-btn" id="btn3">Show More</button>
 
             <!-- <h3><a href="">Project 3</a></h3>
             <div class="project" id="third-project">

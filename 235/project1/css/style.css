@@ -1,12 +1,12 @@
 html{scroll-behavior: smooth;}
 
 body{
-    background: #eeeeee;
+    background: #ccc;
     margin: 0;
     font-family:'Merriweather', Georgia, 'Times New Roman', Times, serif;
 }
 
-p, .navbar, #contact{
+p, .navbar, #contact, .project-btn{
     font-family: 'Lexend', Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -16,8 +16,8 @@ header #title{
 }
 
 header, nav#top{
-    background: black;
-    color: white;
+    background: #111;
+    color: #eee;
     padding: .25rem 0;
 }
 
@@ -55,13 +55,19 @@ ul.navbar{
     text-decoration: none;
 }
 
-.navbar a:link{color: #ffffff;}
-.navbar a:visited{color:#ffffff;}
+.navbar a:link{color: #eee;}
+.navbar a:visited{color:#eee;}
 .navbar a:focus{background: #575757; color: rgb(255, 255, 93);}
 .navbar a:hover{background: #575757; color: rgb(255, 255, 93);}
 .navbar a:active{background: #575757; color: rgb(255, 255, 93);}
 
-main{margin: 0 10%;}
+main{
+    margin: 0 15%;
+    padding: 2rem;
+    background-color: #eee;
+    border-left: 1px solid #575757;
+    border-right: 1px solid #575757;
+}
 
 blockquote{
     font-size: 2em;
@@ -93,6 +99,17 @@ h3 a:focus, #contact a:focus{color: black; text-decoration: underline;}
 h3 a:hover, #contact a:hover{color: black; text-decoration: underline;}
 h3 a:active, #contact a:active{color: black; text-decoration: underline; border: dotted 1px black}
 
+.project-btn{
+    margin-bottom: 1rem;
+    width: 150px;
+    height: 40px;
+    font-size: 1.25rem;
+    color: #eee;
+    background-color: rgb(74, 74, 255);
+    border-radius: 5px;
+    border: none;
+}
+
 section{
     border-bottom: solid 1px #575757;
     padding-bottom: .5rem;
@@ -109,8 +126,10 @@ section.projects{
 
 .project{
     margin: 1rem 0 2rem 0;
-    display: flex;
-    flex-direction: column;
+    padding: 1rem;
+    background-color: #ccc;
+    border-radius: 10px;
+    max-width: 800px;
 }
 
 .project-image{
@@ -223,7 +242,7 @@ section#bio{
 @media screen and (min-width: 1250px)
 {
     section#bio{
-        grid-template-rows: 1fr 2fr;
+        grid-template-rows: 1fr 1fr;
         grid-template-columns: 1fr 1fr;
         grid-template-areas: "about-me image"
                              "contact  image";

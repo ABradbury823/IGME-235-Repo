@@ -3,7 +3,6 @@ template.innerHTML = `
 <style>
     .container {
         padding: 2rem;
-        border-bottom: solid 1px #575757;
     }
 
     .slider-wrapper {
@@ -60,12 +59,15 @@ template.innerHTML = `
         display: flex;
         justify-content: space-between;
         padding: .5rem;
+        background-color: #ccc;
+        border-radius: 10px;
+        margin-top: .25rem;
     }
 
     .left-arrow, .right-arrow {
         width: 5rem;
         height: 3rem;
-        border-radius: 10%;
+        border-radius: 25%;
         border: 1px solid #555555;
         background-color: #a6a6a6;
         opacity: .75;
@@ -133,7 +135,7 @@ class ImageSlider extends HTMLElement {
             this.sliderNav.appendChild(newDot);
         }
         this.totalImages = this.images.length ?? 0;
-        console.log(this.imageData + ", " + this.totalImages);
+        //console.log(this.imageData + ", " + this.totalImages);
 
         this.currentImage = this.imageData[0] ?? null;
         this.currentIndex = 0;
@@ -193,3 +195,27 @@ class ImageSlider extends HTMLElement {
 } //end class
 
 customElements.define("image-slider", ImageSlider)
+
+//Dynamic image slider HTML
+//     <section class="container">
+//         <div class="slider-wrapper">
+//             <div class="slider">
+//                 <img id="slide1" src="media/personal-eyes.PNG" alt="Title screen of Personal Eyes">
+
+//                 PLACEHOLDER IMAGE
+//                 <img id="slide2" src="media/cropbuster.jpg" alt="">
+                        
+//                 PLACEHOLDER IMAGE
+//                 <img id="slide3" src="media/siege-the-castle.PNG" alt="">
+//             </div>
+//         <div class="slider-nav">
+//             <span class="slider-dot"></span>
+//             <span class="slider-dot"></span>
+//             <span class="slider-dot"></span>
+//         </div>
+//         <div class="slider-arrows">
+//             <span class="left-arrow">&lt;</span>
+//             <span class="right-arrow">&gt;</span>
+//         </div>
+//     </div>
+// </section>
