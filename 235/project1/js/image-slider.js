@@ -2,7 +2,10 @@ const template = document.createElement("template");
 template.innerHTML = `
 <style>
     .container {
-        padding: 2rem;
+        padding: 1rem;
+        background-color: #ccc;
+        border-radius: 10px;
+        box-shadow: 3px 3px 3px 3px #888;
     }
 
     .slider-wrapper {
