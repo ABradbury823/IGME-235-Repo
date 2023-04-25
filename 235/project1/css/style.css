@@ -1,7 +1,8 @@
 html{scroll-behavior: smooth;}
 
 body{
-    background: #99958b;
+    background: #1c191e;
+    color: #eee;
     margin: 0;
     font-family:'Merriweather', Georgia, 'Times New Roman', Times, serif;
 }
@@ -11,7 +12,7 @@ p, .navbar, #contact, .project-btn{
 }
 
 header #title{
-    font-size: 2.5rem;
+    font-size: 2rem;
     text-align: center;
 }
 
@@ -24,7 +25,7 @@ header, nav#top{
 nav#top{
     position: sticky;
     top: 0;
-    border-bottom: solid 3px rgb(221, 1, 1);
+    border-bottom: solid 3px rgb(214, 71, 71);
     z-index: 2;
 }   
 
@@ -49,10 +50,12 @@ ul.navbar{
 
     .navbar li{margin: 0;}
 }
+
 .navbar a{
     padding: .5rem;
     border-radius: 5px;
     text-decoration: none;
+    font-variant-caps: small-caps;
 }
 
 .navbar a:link{color: #eee;}
@@ -64,9 +67,9 @@ ul.navbar{
 main{
     margin: 0 15%;
     padding: 2rem;
-    background-color: #dbd5c4;
-    border-left: 1px solid #575757;
-    border-right: 1px solid #575757;
+    background-color: #1c191e;
+    /* border-left: 1px solid #575757;
+    border-right: 1px solid #575757; */
 }
 
 blockquote{
@@ -93,11 +96,18 @@ h3 a{
     font-style: italic;
 }
 
-h3 a:link, #contact a:link{color: black;}
-h3 a:visited, #contact a:visited{color: black;}
-h3 a:focus, #contact a:focus{color: black; text-decoration: underline;}
-h3 a:hover, #contact a:hover{color: black; text-decoration: underline;}
-h3 a:active, #contact a:active{color: black; text-decoration: underline; border: dotted 1px black}
+h3 a:link, #contact a:link{color: #eee;}
+h3 a:visited, #contact a:visited{color: #eee;}
+h3 a:focus, #contact a:focus{color: #eee; text-decoration: underline;}
+h3 a:hover, #contact a:hover{color: #eee; text-decoration: underline;}
+h3 a:active, #contact a:active{color: #eee; text-decoration: underline; border: dotted 1px #eee}
+
+image-slider img, image-slider slot video{
+    flex: 1 0 100%;
+    scroll-snap-align: start;
+    object-fit: cover;        
+    max-width: 48rem;
+}
 
 .project-btn{
     margin: 1rem;
@@ -163,7 +173,7 @@ hr{
 
 #resume i{
     margin: 1rem .25rem 1rem 0;
-    color: rgb(221, 1, 1);
+    color: rgb(214, 71, 71);
     font-size: 1.5rem;
 }
 
@@ -183,11 +193,11 @@ embed{
     }
 }
 
-#resume a:link{color:black; text-decoration: none;}
-#resume a:visited{color:black; text-decoration: none;}
-#resume a:focus{color:black; text-decoration: underline;}
-#resume a:hover{color:black; text-decoration: underline;}
-#resume a:active{color:black; text-decoration: underline; border: dotted 1px black;}
+#resume a:link{color:#eee; text-decoration: none;}
+#resume a:visited{color:#eee; text-decoration: none;}
+#resume a:focus{color:#eee; text-decoration: underline;}
+#resume a:hover{color:#eee; text-decoration: underline;}
+#resume a:active{color:#eee; text-decoration: underline; border: dotted 1px #eee;}
 
 section#bio{
     display: grid;

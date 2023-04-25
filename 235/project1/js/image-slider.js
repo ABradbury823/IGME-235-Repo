@@ -6,6 +6,7 @@ template.innerHTML = `
         background-color: #ccc;
         border-radius: 10px;
         box-shadow: 3px 3px 3px 3px #888;
+        color: #eee;
     }
 
     .slider-wrapper {
@@ -21,7 +22,6 @@ template.innerHTML = `
         overflow: hidden;
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
-        box-shadow: 0 1.5rem 3rem -.75rem hsla(0, 0, 0, .25);
         border-radius: 1rem;
         user-select: none;
     }
@@ -89,9 +89,9 @@ template.innerHTML = `
 </style>
 <section class="container">
     <div class="slider-wrapper">
-        <div class="slider">
+        <slot name="slider-images" class="slider">
             <!-- List of images go here --!>
-        </div>
+        </slot>
         <div class="slider-nav">
             <!-- Slider dots to show location --!>
         </div>
@@ -116,31 +116,23 @@ class ImageSlider extends HTMLElement {
     connectedCallback() {
         this.leftBtn = this.shadowRoot.querySelector(".left-arrow");
         this.rightBtn = this.shadowRoot.querySelector(".right-arrow");
-        this.slider = this.shadowRoot.querySelector(".slider");
+        this.slider = this.shadowRoot.querySelector("slot");
         this.sliderNav = this.shadowRoot.querySelector(".slider-nav");
 
-        this.imageData = this.dataset.images.split(",") ?? [];
-        this.images = [];
+        //this.imageData = this.dataset.images.split(",") ?? [];
+        this.mediaElements = this.slider.assignedNodes();
         
-        //go through images and make image and slider dot
-        //format: src,alt,src,alt,etc.
-        for (let i = 0; i < this.imageData.length; i += 2) {
-            let newImg = document.createElement("img");
-            newImg.id = `slide${i/2 + 1}`;
-            newImg.src = this.imageData[i];
-            newImg.alt = this.imageData[i+1];
-            this.images.push(newImg);
-            
+        console.log(this.slider.assignedNodes())
+        //go through images and make slider dot
+        for (let i = 0; i < this.mediaElements.length; i ++) {
             let newDot = document.createElement("span");
             newDot.classList.add("slider-dot");
             
-            this.slider.appendChild(newImg);
             this.sliderNav.appendChild(newDot);
         }
-        this.totalImages = this.images.length ?? 0;
-        //console.log(this.imageData + ", " + this.totalImages);
+        this.totalElements = this.mediaElements.length ?? 0;
 
-        this.currentImage = this.imageData[0] ?? null;
+        this.currentImage = this.mediaElements[0] ?? null;
         this.currentIndex = 0;
 
 
@@ -152,9 +144,9 @@ class ImageSlider extends HTMLElement {
         this.rightBtn.onclick = rightWrapper;
 
         //hooking up slider dots event
-        this.sliderDots = Array.from(this.shadowRoot.querySelectorAll(".slider-nav span"));
+        this.sliderDots = Array.from(this.shadowRoot.querySelectorAll(".slider-nav span")) ?? [];
         this.sliderDots[0].style = "opacity: 1;";
-        for(let i = 0; i < this.sliderDots.length; i++) {
+        for(let i = 0; i < this.totalElements; i++) {
             const dotWrapper = e => this.changeImage(i);
             this.sliderDots[i].onclick = dotWrapper;
         }
@@ -168,12 +160,12 @@ class ImageSlider extends HTMLElement {
     }
 
     render() {
-        for(let i = 0; i < this.totalImages; i++) {
+        for(let i = 0; i < this.totalElements; i++) {
             //change opacity of appropriate slider dot
             i == this.currentIndex ? this.sliderDots[i].style = "opacity: 1" : this.sliderDots[i].style = "opacity: .5";
 
             //change image being displayed
-            i == this.currentIndex ? this.images[i].hidden = false : this.images[i].hidden = true; 
+            i == this.currentIndex ? this.mediaElements[i].hidden = false : this.mediaElements[i].hidden = true; 
         }
         
     }
@@ -184,12 +176,12 @@ class ImageSlider extends HTMLElement {
         this.currentIndex = index;
 
         //sanitize index
-        if(this.currentIndex < 0) this.currentIndex = this.totalImages - 1;
-        else if(this.currentIndex >= this.totalImages) this.currentIndex = 0;
+        if(this.currentIndex < 0) this.currentIndex = this.totalElements - 1;
+        else if(this.currentIndex >= this.totalElements) this.currentIndex = 0;
 
-        console.log("change image to index " + this.currentIndex);
+        //console.log("change image to index " + this.currentIndex);
 
-        this.currentImage = this.images[this.currentIndex];
+        this.currentImage = this.mediaElements[this.currentIndex];
 
         this.render();
     }
